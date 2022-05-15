@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "connected=false": {
+      "model": "modularmachines:block/machine_controller_disconnected"
+    },
+    "connected=true": {
+      "model": "modularmachines:block/machine_controller_connected"
+    }
+  }
+}
