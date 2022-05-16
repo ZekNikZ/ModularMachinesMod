@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-public enum MachinePosition implements StringRepresentable {
+public enum MachinePartPosition implements StringRepresentable {
     INSIDE("inside", Vec3i.ZERO),
 
     TOP("top", Direction.UP.getNormal()),
@@ -45,7 +45,7 @@ public enum MachinePosition implements StringRepresentable {
     final String serializedName;
     final Vec3i normal;
 
-    MachinePosition(String serializedName, @NotNull Vec3i normal) {
+    MachinePartPosition(String serializedName, @NotNull Vec3i normal) {
         this.serializedName = serializedName;
         this.normal = normal;
     }
@@ -59,9 +59,9 @@ public enum MachinePosition implements StringRepresentable {
         return this.normal;
     }
 
-    public static List<MachinePosition> VALUES = Arrays.asList(values());
+    public static List<MachinePartPosition> VALUES = Arrays.asList(values());
 
-    public static MachinePosition from(Vec3i normal) {
+    public static MachinePartPosition from(Vec3i normal) {
         return VALUES.stream().filter(pos -> pos.getNormal().equals(normal)).findFirst().orElse(null);
     }
 }

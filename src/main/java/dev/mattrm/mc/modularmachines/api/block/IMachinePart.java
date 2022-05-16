@@ -1,6 +1,6 @@
 package dev.mattrm.mc.modularmachines.api.block;
 
-import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
+import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -12,10 +12,10 @@ public interface IMachinePart {
      *
      * @param level           the level of the block to modify
      * @param pos             the position of the block to modify
-     * @param machinePosition the position of this part on the machine
+     * @param machinePartPosition the position of this part on the machine
      * @param controllerPos   the position of the controller of the machine
      */
-    void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePosition machinePosition);
+    void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePartPosition machinePartPosition);
 
     /**
      * Disconnect from the connected machine. If this block is not connected, this is a no-op.
@@ -43,5 +43,5 @@ public interface IMachinePart {
      * @return the position of this block in the machine, or {@code null} if it is not connected
      */
     @Nullable
-    MachinePosition getPosition(Level level, BlockPos pos);
+    MachinePartPosition getPosition(Level level, BlockPos pos);
 }

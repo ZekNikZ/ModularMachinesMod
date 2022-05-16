@@ -2,7 +2,7 @@ package dev.mattrm.mc.modularmachines.common.block.casing;
 
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineCasingBlock;
-import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
+import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -12,8 +12,8 @@ public class MachineCasingBlock extends BaseMachineCasingBlock {
     }
 
     @Override
-    public void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePosition machinePosition) {
-        this.connectionHelper(level, pos, machinePosition, ModBlocks.MACHINE_CASING_CONNECTED.get());
+    public void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePartPosition machinePartPosition) {
+        this.connectionHelper(level, pos, machinePartPosition, ModBlocks.MACHINE_CASING_CONNECTED.get());
     }
 
     @Override

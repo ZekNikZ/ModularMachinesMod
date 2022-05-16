@@ -3,7 +3,7 @@ package dev.mattrm.mc.modularmachines.common.block.controller;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineControllerBlock;
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
-import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
+import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
@@ -24,8 +24,8 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
     }
 
     @Override
-    public void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePosition machinePosition) {
-        this.connectionHelper(level, pos, machinePosition, ModBlocks.MACHINE_CONTROLLER_CONNECTED.get());
+    public void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePartPosition machinePartPosition) {
+        this.connectionHelper(level, pos, machinePartPosition, ModBlocks.MACHINE_CONTROLLER_CONNECTED.get());
     }
 
     @Override

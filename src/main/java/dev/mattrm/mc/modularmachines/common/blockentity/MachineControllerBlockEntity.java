@@ -7,8 +7,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
-import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
-import dev.mattrm.mc.modularmachines.network.PacketHandler;
+import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -302,7 +300,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
                     if (blockState.getBlock() instanceof IMachinePart) {
                         if (toBeConnected) {
                             // TODO: finish this part
-                            ((IMachinePart) blockState.getBlock()).connectToMachine(level, pos, this.getBlockPos(), MachinePosition.NONE);
+                            ((IMachinePart) blockState.getBlock()).connectToMachine(level, pos, this.getBlockPos(), MachinePartPosition.NONE);
                         } else {
                             ((IMachinePart) blockState.getBlock()).disconnectFromMachine(level, pos, this.getBlockPos());
                         }

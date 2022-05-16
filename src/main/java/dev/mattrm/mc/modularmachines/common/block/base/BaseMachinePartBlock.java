@@ -2,7 +2,7 @@ package dev.mattrm.mc.modularmachines.common.block.base;
 
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.common.block.util.CustomBlockStateProperties;
-import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
+import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BaseMachinePartBlock extends Block implements IMachinePart {
     protected final boolean connected;
 
-    public BaseMachinePartBlock(Properties properties, boolean connected, MachinePosition defaultPosition) {
+    public BaseMachinePartBlock(Properties properties, boolean connected, MachinePartPosition defaultPosition) {
         super(properties);
         this.connected = connected;
 
@@ -37,15 +37,15 @@ public abstract class BaseMachinePartBlock extends Block implements IMachinePart
 
     @Nullable
     @Override
-    public MachinePosition getPosition(Level level, BlockPos pos) {
+    public MachinePartPosition getPosition(Level level, BlockPos pos) {
         return this.connected ? level.getBlockState(pos).getValue(CustomBlockStateProperties.MACHINE_POSITION) : null;
     }
 
-    protected void connectionHelper(Level level, BlockPos pos, MachinePosition machinePosition, Block block) {
+    protected void connectionHelper(Level level, BlockPos pos, MachinePartPosition machinePartPosition, Block block) {
         if (this.connected) return;
         if (level.isClientSide()) return;
 
-        BlockState state = block.defaultBlockState().setValue(CustomBlockStateProperties.MACHINE_POSITION, machinePosition);
+        BlockState state = block.defaultBlockState().setValue(CustomBlockStateProperties.MACHINE_POSITION, machinePartPosition);
         level.setBlockAndUpdate(pos, state);
     }
 
