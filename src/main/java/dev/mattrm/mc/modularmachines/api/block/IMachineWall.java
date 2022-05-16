@@ -6,5 +6,4 @@ package dev.mattrm.mc.modularmachines.api.block;
  * All of these blocks also need to be part of the #modularmachines:machine_wall tag
  */
 public interface IMachineWall extends IMachinePart {
-
 }

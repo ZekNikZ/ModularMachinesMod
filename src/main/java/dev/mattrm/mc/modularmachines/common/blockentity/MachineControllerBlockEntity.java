@@ -5,9 +5,8 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineController;
 import dev.mattrm.mc.modularmachines.api.block.IMachineCore;
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
-import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
-import dev.mattrm.mc.modularmachines.common.util.BlockPosUtils;
+import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +14,6 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +24,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
     private boolean connected = false;
     private BlockPos corner1 = BlockPos.ZERO;
     private BlockPos corner2 = BlockPos.ZERO;
+    private Cuboid bounds;
     private String errorMessage = null;
 
     public MachineControllerBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -64,6 +63,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
         if (this.connected == connected) return;
 
         this.connected = connected;
+        this.updateBounds();
         this.setChanged();
     }
 
@@ -73,6 +73,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
         if (this.corner1.equals(corner1)) return;
 
         this.corner1 = corner1;
+        this.updateBounds();
         this.setChanged();
     }
 
@@ -82,12 +83,21 @@ public class MachineControllerBlockEntity extends BlockEntity {
         if (this.corner2.equals(corner2)) return;
 
         this.corner2 = corner2;
+        this.updateBounds();
         this.setChanged();
     }
 
     protected void setCorners(@NotNull BlockPos corner1, @NotNull BlockPos corner2) {
         this.setCorner1(corner1);
         this.setCorner2(corner2);
+    }
+
+    protected void updateBounds() {
+        if (this.connected) {
+            this.bounds = new Cuboid(this.corner1, this.corner2);
+        } else {
+            this.bounds = null;
+        }
     }
 
     /**
@@ -213,7 +223,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
                             for (int y = minY; y <= maxY - dy; ++y) {
                                 BlockPos corner1 = new BlockPos(x, y, z);
                                 BlockPos corner2 = new BlockPos(x + dx, y + dy, z + dz);
-                                if (!BlockPosUtils.within(this.getBlockPos(), corner1, corner2)) {
+                                if (!Cuboid.within(this.getBlockPos(), corner1, corner2)) {
                                     continue;
                                 }
 
@@ -287,7 +297,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
                     BlockPos pos = new BlockPos(x, y, z);
                     BlockState blockState = level.getBlockState(pos);
                     if (blockState.getBlock() instanceof IMachinePart) {
-                        ((IMachinePart) blockState.getBlock()).setConnected(level, pos, this.connected);
+                        ((IMachinePart) blockState.getBlock()).setConnected(level, pos, this.connected, this.bounds);
                     }
                 }
             }

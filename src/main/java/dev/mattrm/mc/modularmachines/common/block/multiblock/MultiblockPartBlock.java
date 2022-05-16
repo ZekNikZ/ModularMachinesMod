@@ -2,9 +2,10 @@ package dev.mattrm.mc.modularmachines.common.block.multiblock;
 
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.common.block.util.CustomBlockStateProperties;
+import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -25,19 +26,13 @@ public abstract class MultiblockPartBlock extends Block implements IMachinePart 
         builder.add(CustomBlockStateProperties.CONNECTED);
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        return super.getStateForPlacement(ctx);
-    }
-
-    @Override
-    public void setConnected(Level level, BlockPos pos, boolean isConnected) {
+    public void setConnected(Level level, BlockPos pos, boolean isConnected, @Nullable Cuboid bounds) {
         level.setBlockAndUpdate(pos, level.getBlockState(pos).setValue(CustomBlockStateProperties.CONNECTED, isConnected));
     }
 
     @Override
-    public boolean isConnected(Level level, BlockPos pos) {
+    public boolean isConnected(LevelAccessor level, BlockPos pos) {
         return level.getBlockState(pos).getValue(CustomBlockStateProperties.CONNECTED);
     }
 }
