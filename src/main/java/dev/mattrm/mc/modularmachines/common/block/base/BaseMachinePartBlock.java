@@ -47,8 +47,6 @@ public abstract class BaseMachinePartBlock extends Block implements IMachinePart
 
         BlockState state = block.defaultBlockState().setValue(CustomBlockStateProperties.MACHINE_POSITION, machinePosition);
         level.setBlockAndUpdate(pos, state);
-
-        System.out.println("connection " + pos.toShortString());
     }
 
     protected void disconnectionHelper(Level level, BlockPos pos, Block block) {
