@@ -1,16 +1,21 @@
 package dev.mattrm.mc.modularmachines.common.blockentity;
 
+import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.api.block.IMachineController;
 import dev.mattrm.mc.modularmachines.api.block.IMachineCore;
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
+import dev.mattrm.mc.modularmachines.common.util.BlockPosUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +26,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
     private boolean connected = false;
     private BlockPos corner1 = BlockPos.ZERO;
     private BlockPos corner2 = BlockPos.ZERO;
+    private String errorMessage = null;
 
     public MachineControllerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.MACHINE_CONTROLLER.get(), blockPos, blockState);
@@ -91,7 +97,10 @@ public class MachineControllerBlockEntity extends BlockEntity {
      */
     public boolean teardownMachine() {
         // Ensure we are already connected
-        if (!this.connected) return false;
+        if (!this.connected) {
+            this.errorMessage = "cannot teardown an already disconnected machine";
+            return false;
+        }
 
         // Mark as disconnected
         this.setConnected(false);
@@ -119,10 +128,17 @@ public class MachineControllerBlockEntity extends BlockEntity {
      */
     public boolean createMachine() {
         // Ensure we are not connected
-        if (this.connected) return false;
+        if (this.connected) {
+            this.errorMessage = "cannot setup an already connected machine";
+            return false;
+        }
 
         // Find the corners of the multiblock
-        this.findMultiblock();
+        boolean status = this.findMultiblock();
+        if (!status) {
+            this.errorMessage += " (could not find multiblock structure)";
+            return false;
+        }
 
         // Mark machine as connected
         this.setConnected(true);
@@ -133,11 +149,12 @@ public class MachineControllerBlockEntity extends BlockEntity {
         return true;
     }
 
-    private void findMultiblock() {
-        // TODO: properly implement
-
+    private boolean findMultiblock() {
         Level level = this.getLevel();
-        if (level == null) return;
+        if (level == null) {
+            this.errorMessage = "level is not available";
+            return false;
+        }
 
         // BFS setup
         Set<BlockPos> visited = new HashSet<>();
@@ -172,24 +189,92 @@ public class MachineControllerBlockEntity extends BlockEntity {
             }
         }
 
-        // Store new corners
-        BlockPos min = new BlockPos(minX, minY, minZ);
-        BlockPos max = new BlockPos(maxX, maxY, maxZ);
-        this.setCorners(min, max);
+        // Checks to ensure structure isn't too small
+        int xSize = Math.min(maxX - minX + 1, Constants.MAX_STRUCTURE_SIZE);
+        int ySize = Math.min(maxY - minY + 1, Constants.MAX_STRUCTURE_SIZE);
+        int zSize = Math.min(maxZ - minZ + 1, Constants.MAX_STRUCTURE_SIZE);
+        if (xSize < Constants.MIN_STRUCTURE_SIZE
+                || ySize < Constants.MIN_STRUCTURE_SIZE
+                || zSize < Constants.MIN_STRUCTURE_SIZE
+        ) {
+            this.errorMessage = "potential structures are all too small";
+            return false;
+        }
+
+        // Check if structure is too big
+        // TODO: this can be smarter and more efficient, but for now, this should be OK
+        boolean found = false;
+        searchLoop:
+        for (int dx = xSize - 1; dx >= Constants.MIN_STRUCTURE_SIZE - 1; --dx) {
+            for (int dz = zSize - 1; dz >= Constants.MIN_STRUCTURE_SIZE - 1; --dz) {
+                for (int dy = ySize - 1; dy >= Constants.MIN_STRUCTURE_SIZE - 1; --dy) {
+                    for (int x = minX; x <= maxX - dx; ++x) {
+                        for (int z = minZ; z <= maxZ - dz; ++z) {
+                            for (int y = minY; y <= maxY - dy; ++y) {
+                                BlockPos corner1 = new BlockPos(x, y, z);
+                                BlockPos corner2 = new BlockPos(x + dx, y + dy, z + dz);
+                                if (!BlockPosUtils.within(this.getBlockPos(), corner1, corner2)) {
+                                    continue;
+                                }
+
+                                if (checkStructure(level, corner1, corner2)) {
+                                    found = true;
+                                    this.setCorners(corner1, corner2);
+                                    break searchLoop;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!found) {
+            this.errorMessage = "could not find structure";
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean checkStructure(Level level, BlockPos corner1, BlockPos corner2) {
+        Set<ResourceLocation> controllerTypes = new HashSet<>();
+        return BlockPos.betweenClosedStream(corner1, corner2).allMatch(pos -> {
+            if (isValidControllerBlock(level, pos)) {
+                // Controller
+                ResourceLocation block = level.getBlockState(pos).getBlock().getRegistryName();
+                if (controllerTypes.contains(block)) {
+                    return false;
+                }
+                controllerTypes.add(block);
+            }
+
+            if (pos.getX() == corner1.getX() || pos.getX() == corner2.getX() || pos.getY() == corner1.getY() || pos.getY() == corner2.getY() || pos.getZ() == corner1.getZ() || pos.getZ() == corner2.getZ()) {
+                // Wall
+                return isValidWallBlock(level, pos);
+            } else {
+                // Core
+                return isValidCoreBlock(level, pos);
+            }
+        });
+    }
+
+    private static boolean isValidControllerBlock(Level level, BlockPos pos) {
+        BlockState blockState = level.getBlockState(pos);
+        Block block = blockState.getBlock();
+        return blockState.is(ModTags.Blocks.MACHINE_CONTROLLERS) && block instanceof IMachineController && !((IMachineController) block).isConnected(level, pos);
     }
 
     private static boolean isValidWallBlock(Level level, BlockPos pos) {
-        // TODO: properly implement
         BlockState blockState = level.getBlockState(pos);
         Block block = blockState.getBlock();
         return blockState.is(ModTags.Blocks.MACHINE_WALLS) && block instanceof IMachineWall && !((IMachineWall) block).isConnected(level, pos);
     }
 
     private static boolean isValidCoreBlock(Level level, BlockPos pos) {
-        // TODO: properly implement
         BlockState blockState = level.getBlockState(pos);
         Block block = blockState.getBlock();
-        return blockState.is(ModTags.Blocks.MACHINE_WALLS) && block instanceof IMachineCore && !((IMachineCore) block).isConnected(level, pos);
+        return blockState.isAir() || (blockState.is(ModTags.Blocks.MACHINE_CORES) && block instanceof IMachineCore && !((IMachineCore) block).isConnected(level, pos));
     }
 
     private void updateMultiblock() {
@@ -207,5 +292,9 @@ public class MachineControllerBlockEntity extends BlockEntity {
                 }
             }
         }
+    }
+
+    public String getErrorMessage() {
+        return this.errorMessage;
     }
 }

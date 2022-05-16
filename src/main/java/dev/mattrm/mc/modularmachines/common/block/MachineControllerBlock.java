@@ -8,10 +8,12 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +28,6 @@ public class MachineControllerBlock extends MultiblockControllerBlock {
     public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 
-        player.sendMessage(new TextComponent("Right-clicked!"), Util.NIL_UUID);
-
         // Get block entity
         MachineControllerBlockEntity be = (MachineControllerBlockEntity) level.getBlockEntity(blockPos);
         if (be == null) {
@@ -37,13 +37,31 @@ public class MachineControllerBlock extends MultiblockControllerBlock {
         // Setup/teardown the machine
         boolean success;
         if (!be.isConnected()) {
+            player.sendMessage(new TextComponent("Creating machine..."), Util.NIL_UUID);
             success = be.createMachine();
         } else {
+            player.sendMessage(new TextComponent("Tearing down machine..."), Util.NIL_UUID);
             success = be.teardownMachine();
         }
-        player.sendMessage(new TextComponent("Status: " + success), Util.NIL_UUID);
+
+        if (success) {
+            player.sendMessage(new TextComponent("Success!"), Util.NIL_UUID);
+        } else {
+            player.sendMessage(new TextComponent("Error: " + be.getErrorMessage()), Util.NIL_UUID);
+        }
 
         return InteractionResult.CONSUME;
+    }
+
+    @Override
+    public void onRemove(BlockState blockState, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!blockState.is(newState.getBlock())) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof MachineControllerBlockEntity) {
+                ((MachineControllerBlockEntity) be).teardownMachine();
+            }
+            super.onRemove(blockState, level, pos, newState, isMoving);
+        }
     }
 
     @Nullable

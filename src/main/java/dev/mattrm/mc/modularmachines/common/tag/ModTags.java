@@ -13,6 +13,8 @@ import net.minecraft.world.level.material.Fluid;
 public class ModTags {
     public static class Blocks {
         public static final TagKey<Block> MACHINE_WALLS = createTag("machine_walls");
+        public static final TagKey<Block> MACHINE_CONTROLLERS = createTag("machine_controllers");
+        public static final TagKey<Block> MACHINE_CORES = createTag("machine_cores");
 
         private static TagKey<Block> createTag(String name) {
             return BlockTags.create(new ResourceLocation(Constants.MOD_ID, name));
