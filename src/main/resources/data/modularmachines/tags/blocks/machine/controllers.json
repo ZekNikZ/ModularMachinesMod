@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "modularmachines:machine_controller",
+    "modularmachines:machine_controller_connected"
+  ]
+}

@@ -1,27 +1,36 @@
-package dev.mattrm.mc.modularmachines.common.block;
+package dev.mattrm.mc.modularmachines.common.block.controller;
 
-import dev.mattrm.mc.modularmachines.common.block.multiblock.MultiblockControllerBlock;
+import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
+import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineControllerBlock;
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
+import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MachineControllerBlock extends MultiblockControllerBlock {
-    public MachineControllerBlock() {
-        super(BlockBehaviour.Properties.of(Material.METAL));
+public class MachineControllerBlock extends BaseMachineControllerBlock implements EntityBlock {
+    public MachineControllerBlock(Properties properties, boolean connected) {
+        super(properties, connected);
+    }
+
+    @Override
+    public void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePosition machinePosition) {
+        this.connectionHelper(level, pos, machinePosition, ModBlocks.MACHINE_CONTROLLER_CONNECTED.get());
+    }
+
+    @Override
+    public void disconnectFromMachine(Level level, BlockPos pos, BlockPos controllerPos) {
+        this.disconnectionHelper(level, pos, ModBlocks.MACHINE_CONTROLLER.get());
     }
 
     @Override
@@ -36,7 +45,7 @@ public class MachineControllerBlock extends MultiblockControllerBlock {
 
         // Setup/teardown the machine
         boolean success;
-        if (!be.isConnected()) {
+        if (!this.connected) {
             player.sendMessage(new TextComponent("Creating machine..."), Util.NIL_UUID);
             success = be.createMachine();
         } else {
@@ -54,8 +63,13 @@ public class MachineControllerBlock extends MultiblockControllerBlock {
     }
 
     @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState blockState, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
         if (!blockState.is(newState.getBlock())) {
+            // If we are transitioning "connected" states, don't do anything
+            if (newState.getBlock() instanceof MachineControllerBlock) {
+                return;
+            }
+
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof MachineControllerBlockEntity) {
                 ((MachineControllerBlockEntity) be).teardownMachine();

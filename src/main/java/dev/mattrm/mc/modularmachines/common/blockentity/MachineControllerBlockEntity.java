@@ -7,6 +7,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
+import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -297,7 +298,12 @@ public class MachineControllerBlockEntity extends BlockEntity {
                     BlockPos pos = new BlockPos(x, y, z);
                     BlockState blockState = level.getBlockState(pos);
                     if (blockState.getBlock() instanceof IMachinePart) {
-                        ((IMachinePart) blockState.getBlock()).setConnected(level, pos, this.connected, this.bounds);
+                        if (this.connected) {
+                            ((IMachinePart) blockState.getBlock()).disconnectFromMachine(level, pos, this.getBlockPos());
+                        } else {
+                            // TODO: complete
+                            ((IMachinePart) blockState.getBlock()).connectToMachine(level, pos, this.getBlockPos(), MachinePosition.NONE);
+                        }
                     }
                 }
             }
@@ -307,4 +313,6 @@ public class MachineControllerBlockEntity extends BlockEntity {
     public String getErrorMessage() {
         return this.errorMessage;
     }
+
+
 }

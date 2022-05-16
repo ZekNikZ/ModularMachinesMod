@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:machine_casing"
+          "name": "modularmachines:machine_casing"
         }
       ],
       "conditions": [
