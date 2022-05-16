@@ -8,6 +8,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import dev.mattrm.mc.modularmachines.common.util.MachinePosition;
+import dev.mattrm.mc.modularmachines.network.PacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -117,7 +119,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
         this.setConnected(false);
 
         // Update the block state of the multiblock
-        this.updateMultiblock();
+        this.updateMultiblock(false);
 
         // Clear corners
         this.setCorners(BlockPos.ZERO, BlockPos.ZERO);
@@ -155,7 +157,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
         this.setConnected(true);
 
         // Update the block state of the multiblock
-        this.updateMultiblock();
+        this.updateMultiblock(true);
 
         return true;
     }
@@ -288,7 +290,7 @@ public class MachineControllerBlockEntity extends BlockEntity {
         return blockState.isAir() || (blockState.is(ModTags.Blocks.MACHINE_CORES) && block instanceof IMachineCore && !((IMachineCore) block).isConnected(level, pos));
     }
 
-    private void updateMultiblock() {
+    public void updateMultiblock(boolean toBeConnected) {
         Level level = this.getLevel();
         if (level == null) return;
 
@@ -298,11 +300,11 @@ public class MachineControllerBlockEntity extends BlockEntity {
                     BlockPos pos = new BlockPos(x, y, z);
                     BlockState blockState = level.getBlockState(pos);
                     if (blockState.getBlock() instanceof IMachinePart) {
-                        if (this.connected) {
-                            ((IMachinePart) blockState.getBlock()).disconnectFromMachine(level, pos, this.getBlockPos());
-                        } else {
-                            // TODO: complete
+                        if (toBeConnected) {
+                            // TODO: finish this part
                             ((IMachinePart) blockState.getBlock()).connectToMachine(level, pos, this.getBlockPos(), MachinePosition.NONE);
+                        } else {
+                            ((IMachinePart) blockState.getBlock()).disconnectFromMachine(level, pos, this.getBlockPos());
                         }
                     }
                 }
@@ -313,6 +315,4 @@ public class MachineControllerBlockEntity extends BlockEntity {
     public String getErrorMessage() {
         return this.errorMessage;
     }
-
-
 }
