@@ -42,9 +42,4 @@ public class MachineCasingBlock extends BaseMachineCasingBlock {
         }
         return tags;
     }
-
-    @Override
-    public boolean dataNoLootTable() {
-        return this.connected;
-    }
 }

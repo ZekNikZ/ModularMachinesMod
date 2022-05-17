@@ -104,9 +104,4 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
         }
         return tags;
     }
-
-    @Override
-    public boolean dataNoLootTable() {
-        return this.connected;
-    }
 }

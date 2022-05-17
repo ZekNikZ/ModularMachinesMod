@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "modularmachines:block/machine_controller_disconnected"
-  }
-}

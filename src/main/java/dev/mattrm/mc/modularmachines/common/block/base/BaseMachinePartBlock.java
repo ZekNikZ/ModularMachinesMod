@@ -56,4 +56,9 @@ public abstract class BaseMachinePartBlock extends DataBlock implements IMachine
         BlockState state = block.defaultBlockState();
         level.setBlockAndUpdate(pos, state);
     }
+
+    @Override
+    public boolean dataNoLootTable() {
+        return this.connected;
+    }
 }
