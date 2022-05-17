@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.data.itemmodel;
+package dev.mattrm.mc.modularmachines.data.model;
 
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.common.item.ModItems;

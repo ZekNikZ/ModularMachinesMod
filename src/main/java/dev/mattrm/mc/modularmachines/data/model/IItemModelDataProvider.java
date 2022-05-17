@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.data.itemmodel;
+package dev.mattrm.mc.modularmachines.data.model;
 
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 

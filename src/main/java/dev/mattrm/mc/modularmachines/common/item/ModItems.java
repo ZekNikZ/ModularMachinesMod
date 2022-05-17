@@ -3,7 +3,7 @@ package dev.mattrm.mc.modularmachines.common.item;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.tab.ModCreativeTabs;
-import dev.mattrm.mc.modularmachines.data.itemmodel.IItemModelDataProvider;
+import dev.mattrm.mc.modularmachines.data.model.IItemModelDataProvider;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;

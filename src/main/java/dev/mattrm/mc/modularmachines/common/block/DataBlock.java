@@ -2,7 +2,7 @@ package dev.mattrm.mc.modularmachines.common.block;
 
 import dev.mattrm.mc.modularmachines.data.blockstates.BlockStateDataProvider;
 import dev.mattrm.mc.modularmachines.data.blockstates.IBlockStateDataProvider;
-import dev.mattrm.mc.modularmachines.data.itemmodel.IItemModelDataProvider;
+import dev.mattrm.mc.modularmachines.data.model.IItemModelDataProvider;
 import dev.mattrm.mc.modularmachines.data.lang.ILanguageDataProvider;
 import dev.mattrm.mc.modularmachines.data.loot.BaseLootTableProvider;
 import dev.mattrm.mc.modularmachines.data.loot.ILootTableDataProvider;

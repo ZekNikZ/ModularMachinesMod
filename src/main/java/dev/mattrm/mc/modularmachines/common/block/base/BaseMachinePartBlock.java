@@ -4,11 +4,14 @@ import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.common.block.DataBlock;
 import dev.mattrm.mc.modularmachines.common.block.util.CustomBlockStateProperties;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
+import dev.mattrm.mc.modularmachines.data.blockstates.BlockStateDataProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseMachinePartBlock extends DataBlock implements IMachinePart {
@@ -60,5 +63,23 @@ public abstract class BaseMachinePartBlock extends DataBlock implements IMachine
     @Override
     public boolean dataNoLootTable() {
         return this.connected;
+    }
+
+    @Override
+    public void dataBlockState(BlockStateDataProvider provider) {
+        provider.getVariantBuilder(this)
+            .forAllStatesExcept(state ->
+                    ConfiguredModel.builder()
+                        .modelFile(machineModel(provider, this, state.getValue(CustomBlockStateProperties.MACHINE_POSITION)))
+                        .build()
+                , CustomBlockStateProperties.CONNECTED);
+    }
+
+    private static ModelFile machineModel(BlockStateDataProvider provider, Block block, MachinePartPosition value) {
+        return provider.models()
+            .getBuilder(block.getRegistryName().getPath() + "_" + value.getSerializedName())
+            .parent(provider.MACHINE_PART_MODELS.get(value))
+            // TODO: finish this
+            .texture("top", provider.modLoc(block.getRegistryName().getPath()));
     }
 }
