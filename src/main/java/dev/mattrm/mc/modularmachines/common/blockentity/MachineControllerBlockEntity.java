@@ -10,6 +10,7 @@ import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -299,8 +300,28 @@ public class MachineControllerBlockEntity extends BlockEntity {
                     BlockState blockState = level.getBlockState(pos);
                     if (blockState.getBlock() instanceof IMachinePart) {
                         if (toBeConnected) {
-                            // TODO: finish this part
-                            ((IMachinePart) blockState.getBlock()).connectToMachine(level, pos, this.getBlockPos(), MachinePartPosition.NONE);
+                            // Determine machine part location
+                            int dx = 0;
+                            int dy = 0;
+                            int dz = 0;
+                            if (pos.getX() == this.corner1.getX()) {
+                                dx = -1;
+                            } else if (pos.getX() == this.corner2.getX()) {
+                                dx = 1;
+                            }
+                            if (pos.getY() == this.corner1.getY()) {
+                                dy = -1;
+                            } else if (pos.getY() == this.corner2.getY()) {
+                                dy = 1;
+                            }
+                            if (pos.getZ() == this.corner1.getZ()) {
+                                dz = -1;
+                            } else if (pos.getZ() == this.corner2.getZ()) {
+                                dz = 1;
+                            }
+
+                            // Connect to machine
+                            ((IMachinePart) blockState.getBlock()).connectToMachine(level, pos, this.getBlockPos(), MachinePartPosition.from(new Vec3i(dx, dy, dz)));
                         } else {
                             ((IMachinePart) blockState.getBlock()).disconnectFromMachine(level, pos, this.getBlockPos());
                         }
