@@ -206,8 +206,8 @@ public class MachineControllerBlockEntity extends BlockEntity {
         int ySize = Math.min(maxY - minY + 1, Constants.MAX_STRUCTURE_SIZE);
         int zSize = Math.min(maxZ - minZ + 1, Constants.MAX_STRUCTURE_SIZE);
         if (xSize < Constants.MIN_STRUCTURE_SIZE
-                || ySize < Constants.MIN_STRUCTURE_SIZE
-                || zSize < Constants.MIN_STRUCTURE_SIZE
+            || ySize < Constants.MIN_STRUCTURE_SIZE
+            || zSize < Constants.MIN_STRUCTURE_SIZE
         ) {
             this.errorMessage = "potential structures are all too small";
             return false;

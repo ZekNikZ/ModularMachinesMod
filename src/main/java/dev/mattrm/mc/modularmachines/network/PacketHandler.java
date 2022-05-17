@@ -12,7 +12,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class PacketHandler {
-    private PacketHandler () {}
+    private PacketHandler() {
+    }
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(

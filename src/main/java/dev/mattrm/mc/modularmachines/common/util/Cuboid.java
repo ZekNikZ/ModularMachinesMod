@@ -21,16 +21,16 @@ public class Cuboid {
 
     public boolean within(BlockPos target) {
         return this.minX <= target.getX() && target.getX() <= this.maxX
-                && this.minY <= target.getY() && target.getY() <= this.maxY
-                && this.minZ <= target.getZ() && target.getZ() <= this.maxZ;
+            && this.minY <= target.getY() && target.getY() <= this.maxY
+            && this.minZ <= target.getZ() && target.getZ() <= this.maxZ;
     }
 
     public static boolean within(BlockPos target, BlockPos corner1, BlockPos corner2) {
         return target.getX() >= Math.min(corner1.getX(), corner2.getX())
-                && target.getX() <= Math.max(corner1.getX(), corner2.getX())
-                && target.getY() >= Math.min(corner1.getY(), corner2.getY())
-                && target.getY() <= Math.max(corner1.getY(), corner2.getY())
-                && target.getZ() >= Math.min(corner1.getZ(), corner2.getZ())
-                && target.getZ() <= Math.max(corner1.getZ(), corner2.getZ());
+            && target.getX() <= Math.max(corner1.getX(), corner2.getX())
+            && target.getY() >= Math.min(corner1.getY(), corner2.getY())
+            && target.getY() <= Math.max(corner1.getY(), corner2.getY())
+            && target.getZ() >= Math.min(corner1.getZ(), corner2.getZ())
+            && target.getZ() <= Math.max(corner1.getZ(), corner2.getZ());
     }
 }

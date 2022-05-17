@@ -10,19 +10,19 @@ public interface IMachinePart {
     /**
      * Connect to a specified machine. If this block is already connected, this is a no-op.
      *
-     * @param level           the level of the block to modify
-     * @param pos             the position of the block to modify
+     * @param level               the level of the block to modify
+     * @param pos                 the position of the block to modify
      * @param machinePartPosition the position of this part on the machine
-     * @param controllerPos   the position of the controller of the machine
+     * @param controllerPos       the position of the controller of the machine
      */
     void connectToMachine(Level level, BlockPos pos, BlockPos controllerPos, MachinePartPosition machinePartPosition);
 
     /**
      * Disconnect from the connected machine. If this block is not connected, this is a no-op.
      *
-     * @param level           the level of the block to modify
-     * @param pos             the position of the block to modify
-     * @param machinePosition the position of this part on the machine
+     * @param level         the level of the block to modify
+     * @param pos           the position of the block to modify
+     * @param controllerPos the position of the controller of the machine
      */
     void disconnectFromMachine(Level level, BlockPos pos, BlockPos controllerPos);
 
