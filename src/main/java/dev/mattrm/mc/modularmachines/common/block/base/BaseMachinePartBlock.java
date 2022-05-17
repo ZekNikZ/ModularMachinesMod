@@ -1,6 +1,7 @@
 package dev.mattrm.mc.modularmachines.common.block.base;
 
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
+import dev.mattrm.mc.modularmachines.common.block.DataBlock;
 import dev.mattrm.mc.modularmachines.common.block.util.CustomBlockStateProperties;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
 import net.minecraft.core.BlockPos;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BaseMachinePartBlock extends Block implements IMachinePart {
+public abstract class BaseMachinePartBlock extends DataBlock implements IMachinePart {
     protected final boolean connected;
 
     public BaseMachinePartBlock(Properties properties, boolean connected, MachinePartPosition defaultPosition) {

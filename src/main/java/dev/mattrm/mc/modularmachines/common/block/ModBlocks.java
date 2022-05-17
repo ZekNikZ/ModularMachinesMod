@@ -13,6 +13,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ModBlocks {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
 
@@ -26,5 +29,9 @@ public class ModBlocks {
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
+    }
+
+    public static List<Block> getRegisteredBlocks() {
+        return BLOCKS.getEntries().stream().map(RegistryObject::get).collect(Collectors.toList());
     }
 }

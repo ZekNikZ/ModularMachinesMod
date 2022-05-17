@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "modularmachines:machine_casing",
+    "modularmachines:machine_controller"
+  ]
+}

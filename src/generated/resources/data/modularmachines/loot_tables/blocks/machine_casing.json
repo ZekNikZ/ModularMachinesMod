@@ -2,6 +2,7 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "name": "modularmachines:machine_casing",
       "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [

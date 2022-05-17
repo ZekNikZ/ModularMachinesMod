@@ -1,0 +1,7 @@
+{
+  "block.modularmachines.machine_casing": "Machine Casing",
+  "block.modularmachines.machine_casing_connected": "Machine Casing (Connected)",
+  "block.modularmachines.machine_controller": "Machine Controller",
+  "block.modularmachines.machine_controller_connected": "Machine Controller (Connected)",
+  "itemGroup.modular_machines": "Modular Machines"
+}

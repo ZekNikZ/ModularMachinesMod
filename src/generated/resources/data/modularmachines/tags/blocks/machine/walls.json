@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#modularmachines:machine/controllers",
     "#modularmachines:machine/ports",
+    "#modularmachines:machine/controllers",
     "modularmachines:machine_casing",
     "modularmachines:machine_casing_connected"
   ]
