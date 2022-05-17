@@ -30,7 +30,7 @@ public class MachineCasingBlock extends BaseMachineCasingBlock {
     }
 
     @Override
-    public @NotNull String dataLanguageKey(String locale) {
+    public String dataLanguageKey(String locale) {
         return "Machine Casing" + (this.connected ? " (Connected)" : "");
     }
 
@@ -45,7 +45,7 @@ public class MachineCasingBlock extends BaseMachineCasingBlock {
     }
 
     @Override
-    public LootTable.Builder dataLootTable(String name) {
-        return !this.connected ? super.dataLootTable(name) : null;
+    public boolean dataNoLootTable() {
+        return this.connected;
     }
 }

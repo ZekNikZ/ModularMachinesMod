@@ -15,7 +15,7 @@ public class LootTableDataProvider extends BaseLootTableProvider {
         ModBlocks.getRegisteredBlocks().forEach(block -> {
             if (block instanceof ILootTableDataProvider lootProvider) {
                 LootTable.Builder builder = lootProvider.dataLootTable(block.getRegistryName().toString());
-                if (builder != null) {
+                if (builder != null && !lootProvider.dataNoLootTable()) {
                     this.lootTables.put(block, builder);
                 }
             }

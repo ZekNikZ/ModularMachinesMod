@@ -92,7 +92,7 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
     }
 
     @Override
-    public @NotNull String dataLanguageKey(String locale) {
+    public String dataLanguageKey(String locale) {
         return "Machine Controller" + (this.connected ? " (Connected)" : "");
     }
 
@@ -107,7 +107,7 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
     }
 
     @Override
-    public LootTable.Builder dataLootTable(String name) {
-        return !this.connected ? super.dataLootTable(name) : null;
+    public boolean dataNoLootTable() {
+        return this.connected;
     }
 }

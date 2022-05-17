@@ -2,8 +2,12 @@ package dev.mattrm.mc.modularmachines.data.tags;
 
 import net.minecraft.tags.TagKey;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface ITagDataProvider<T> {
-    List<TagKey<T>> dataTags();
+    @Nullable
+    default List<TagKey<T>> dataTags() {
+        return null;
+    }
 }

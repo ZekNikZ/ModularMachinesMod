@@ -1,7 +1,10 @@
 package dev.mattrm.mc.modularmachines.data.lang;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
 
 public interface ILanguageDataProvider {
-    @NotNull String dataLanguageKey(String locale);
+   @Nullable
+   default String dataLanguageKey(String locale) {
+      return null;
+   }
 }

@@ -19,14 +19,20 @@ public class LanguageDataProvider extends LanguageProvider {
         // Blocks
         ModBlocks.getRegisteredBlocks().forEach(block -> {
             if (block instanceof ILanguageDataProvider keyProvider) {
-                this.add(block, keyProvider.dataLanguageKey(this.locale));
+                String key = keyProvider.dataLanguageKey(this.locale);
+                if (key != null) {
+                    this.add(block, key);
+                }
             }
         });
 
         // Creative Tabs
         ModCreativeTabs.getRegisteredTabs().forEach(_tab -> {
             if (_tab instanceof ModCreativeTabs.MCT tab) {
-                this.add("itemGroup." + tab.getLabel(), tab.dataLanguageKey(this.locale));
+                String key = tab.dataLanguageKey(this.locale);
+                if (key != null) {
+                    this.add("itemGroup." + tab.getLabel(), key);
+                }
             }
         });
     }

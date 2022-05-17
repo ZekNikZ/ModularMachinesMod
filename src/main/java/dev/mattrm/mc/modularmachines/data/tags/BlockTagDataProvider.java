@@ -34,10 +34,13 @@ public class BlockTagDataProvider extends BlockTagsProvider {
         Map<TagKey<Block>, List<Block>> tags = new HashMap<>();
         ModBlocks.getRegisteredBlocks().forEach(block -> {
             if (block instanceof IBlockTagDataProvider dataProvider) {
-                dataProvider.dataTags().forEach(tag -> {
-                    tags.putIfAbsent(tag, new ArrayList<>());
-                    tags.get(tag).add(block);
-                });
+                List<TagKey<Block>> tagKeys = dataProvider.dataTags();
+                if (tagKeys != null) {
+                    tagKeys.forEach(tag -> {
+                        tags.putIfAbsent(tag, new ArrayList<>());
+                        tags.get(tag).add(block);
+                    });
+                }
             }
         });
 
