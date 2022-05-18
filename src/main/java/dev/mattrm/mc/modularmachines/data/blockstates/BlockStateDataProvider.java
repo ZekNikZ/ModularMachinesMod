@@ -28,6 +28,7 @@ public class BlockStateDataProvider extends BlockStateProvider {
         MACHINE_PART_MODEL_TEMPLATES.addAll(Arrays.asList(
             // 0
             this.models().getBuilder("block/machine/template_0")
+                .parent(this.models().getExistingFile(mcLoc("block/block")))
                 .element()
                 .allFaces((dir, x) -> x.texture("#all")
                     .cullface(dir)
@@ -39,6 +40,7 @@ public class BlockStateDataProvider extends BlockStateProvider {
                 .end(),
             // 1
             this.models().getBuilder("block/machine/template_1")
+                .parent(this.models().getExistingFile(mcLoc("block/block")))
                 .element()
                 .allFaces((dir, x) -> x.texture("#all")
                     .cullface(dir)
@@ -53,6 +55,7 @@ public class BlockStateDataProvider extends BlockStateProvider {
                 .end(),
             // 2
             this.models().getBuilder("block/machine/template_2")
+                .parent(this.models().getExistingFile(mcLoc("block/block")))
                 .element()
                 .allFaces((dir, x) -> x.texture("#all")
                     .cullface(dir)
@@ -69,6 +72,7 @@ public class BlockStateDataProvider extends BlockStateProvider {
                 .end(),
             // 3
             this.models().getBuilder("block/machine/template_3")
+                .parent(this.models().getExistingFile(mcLoc("block/block")))
                 .element()
                 .allFaces((dir, x) -> x.texture("#all")
                     .cullface(dir)
@@ -88,6 +92,7 @@ public class BlockStateDataProvider extends BlockStateProvider {
                 .end(),
             // 4
             this.models().getBuilder("block/machine/template_4")
+                .parent(this.models().getExistingFile(mcLoc("block/block")))
                 .element()
                 .allFaces((dir, x) -> x.texture("#all")
                     .cullface(dir)

@@ -71,14 +71,17 @@ public abstract class BaseMachinePartBlock extends DataBlock implements IMachine
 
     @Override
     public void dataBlockState(BlockStateDataProvider provider) {
+        // Block model files
         List<ModelFile> machineModels = IntStream.range(0, provider.MACHINE_PART_MODEL_TEMPLATES.size())
             .mapToObj(i -> provider.models()
                 .getBuilder(this.getRegistryName().getPath() + "_" + i)
                 .parent(provider.MACHINE_PART_MODEL_TEMPLATES.get(i))
                 .texture("all", provider.blockTexture(this))
+                .texture("particle", provider.blockTexture(this))
             )
             .collect(Collectors.toList());
 
+        // Block states
         provider.getVariantBuilder(this)
             .forAllStatesExcept(state -> {
                     MachinePartPosition pos = state.getValue(CustomBlockStateProperties.MACHINE_POSITION);
@@ -89,5 +92,8 @@ public abstract class BaseMachinePartBlock extends DataBlock implements IMachine
                         .build();
                 },
                 CustomBlockStateProperties.CONNECTED);
+
+        // Item model
+        provider.itemModels().withExistingParent(this.getRegistryName().getPath(), provider.modLoc("block/" + this.getRegistryName().getPath() + "_" + 4));
     }
 }

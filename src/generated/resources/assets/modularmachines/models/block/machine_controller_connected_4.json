@@ -1,6 +1,7 @@
 {
   "parent": "modularmachines:block/machine/template_4",
   "textures": {
-    "all": "modularmachines:block/machine_controller_connected"
+    "all": "modularmachines:block/machine_controller_connected",
+    "particle": "modularmachines:block/machine_controller_connected"
   }
 }
