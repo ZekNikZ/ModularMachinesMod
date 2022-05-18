@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "modularmachines:block/machine/template_4",
   "textures": {
     "all": "modularmachines:block/machine_casing"
   }

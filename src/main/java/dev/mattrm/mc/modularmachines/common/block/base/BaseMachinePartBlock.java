@@ -14,6 +14,10 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public abstract class BaseMachinePartBlock extends DataBlock implements IMachinePart {
     protected final boolean connected;
 
@@ -67,19 +71,23 @@ public abstract class BaseMachinePartBlock extends DataBlock implements IMachine
 
     @Override
     public void dataBlockState(BlockStateDataProvider provider) {
-        provider.getVariantBuilder(this)
-            .forAllStatesExcept(state ->
-                    ConfiguredModel.builder()
-                        .modelFile(machineModel(provider, this, state.getValue(CustomBlockStateProperties.MACHINE_POSITION)))
-                        .build()
-                , CustomBlockStateProperties.CONNECTED);
-    }
+        List<ModelFile> machineModels = IntStream.range(0, provider.MACHINE_PART_MODEL_TEMPLATES.size())
+            .mapToObj(i -> provider.models()
+                .getBuilder(this.getRegistryName().getPath() + "_" + i)
+                .parent(provider.MACHINE_PART_MODEL_TEMPLATES.get(i))
+                .texture("all", provider.blockTexture(this))
+            )
+            .collect(Collectors.toList());
 
-    private static ModelFile machineModel(BlockStateDataProvider provider, Block block, MachinePartPosition value) {
-        return provider.models()
-            .getBuilder(block.getRegistryName().getPath() + "_" + value.getSerializedName())
-            .parent(provider.MACHINE_PART_MODELS.get(value))
-            // TODO: finish this
-            .texture("top", provider.modLoc(block.getRegistryName().getPath()));
+        provider.getVariantBuilder(this)
+            .forAllStatesExcept(state -> {
+                    MachinePartPosition pos = state.getValue(CustomBlockStateProperties.MACHINE_POSITION);
+                    return ConfiguredModel.builder()
+                        .modelFile(machineModels.get(pos.getArity()))
+                        .rotationX(pos.getModelRotX())
+                        .rotationY(pos.getModelRotY())
+                        .build();
+                },
+                CustomBlockStateProperties.CONNECTED);
     }
 }

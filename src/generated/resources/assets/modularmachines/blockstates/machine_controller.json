@@ -1,7 +1,118 @@
 {
   "variants": {
-    "": {
-      "model": "modularmachines:block/machine_controller"
+    "position=inside": {
+      "model": "modularmachines:block/machine_controller_4"
+    },
+    "position=top": {
+      "model": "modularmachines:block/machine_controller_0"
+    },
+    "position=bottom": {
+      "model": "modularmachines:block/machine_controller_0",
+      "x": 180
+    },
+    "position=north": {
+      "model": "modularmachines:block/machine_controller_0",
+      "x": 90
+    },
+    "position=south": {
+      "model": "modularmachines:block/machine_controller_0",
+      "x": 270
+    },
+    "position=east": {
+      "model": "modularmachines:block/machine_controller_0",
+      "x": 90,
+      "y": 90
+    },
+    "position=west": {
+      "model": "modularmachines:block/machine_controller_0",
+      "x": 270,
+      "y": 90
+    },
+    "position=north_top": {
+      "model": "modularmachines:block/machine_controller_1"
+    },
+    "position=north_bottom": {
+      "model": "modularmachines:block/machine_controller_1",
+      "x": 90
+    },
+    "position=south_top": {
+      "model": "modularmachines:block/machine_controller_1",
+      "x": 270
+    },
+    "position=south_bottom": {
+      "model": "modularmachines:block/machine_controller_1",
+      "x": 180
+    },
+    "position=east_top": {
+      "model": "modularmachines:block/machine_controller_1",
+      "y": 90
+    },
+    "position=east_bottom": {
+      "model": "modularmachines:block/machine_controller_1",
+      "x": 90,
+      "y": 90
+    },
+    "position=west_top": {
+      "model": "modularmachines:block/machine_controller_1",
+      "x": 270,
+      "y": 90
+    },
+    "position=west_bottom": {
+      "model": "modularmachines:block/machine_controller_1",
+      "x": 180,
+      "y": 90
+    },
+    "position=north_east": {
+      "model": "modularmachines:block/machine_controller_2"
+    },
+    "position=north_west": {
+      "model": "modularmachines:block/machine_controller_2",
+      "y": 270
+    },
+    "position=south_east": {
+      "model": "modularmachines:block/machine_controller_2",
+      "y": 90
+    },
+    "position=south_west": {
+      "model": "modularmachines:block/machine_controller_2",
+      "y": 180
+    },
+    "position=north_east_top": {
+      "model": "modularmachines:block/machine_controller_3"
+    },
+    "position=north_west_top": {
+      "model": "modularmachines:block/machine_controller_3",
+      "y": 270
+    },
+    "position=south_east_top": {
+      "model": "modularmachines:block/machine_controller_3",
+      "y": 90
+    },
+    "position=south_west_top": {
+      "model": "modularmachines:block/machine_controller_3",
+      "y": 180
+    },
+    "position=north_east_bottom": {
+      "model": "modularmachines:block/machine_controller_3",
+      "x": 90
+    },
+    "position=north_west_bottom": {
+      "model": "modularmachines:block/machine_controller_3",
+      "x": 90,
+      "y": 270
+    },
+    "position=south_east_bottom": {
+      "model": "modularmachines:block/machine_controller_3",
+      "x": 90,
+      "y": 90
+    },
+    "position=south_west_bottom": {
+      "model": "modularmachines:block/machine_controller_3",
+      "x": 90,
+      "y": 180
+    },
+    "position=none": {
+      "model": "modularmachines:block/machine_controller_4"
     }
   }
 }
