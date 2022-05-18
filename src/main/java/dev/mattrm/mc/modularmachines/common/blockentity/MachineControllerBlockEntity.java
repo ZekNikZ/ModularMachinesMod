@@ -8,6 +8,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
+import dev.mattrm.mc.modularmachines.setup.MachineConstructionConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -202,9 +203,9 @@ public class MachineControllerBlockEntity extends BlockEntity {
         }
 
         // Checks to ensure structure isn't too small
-        int xSize = Math.min(maxX - minX + 1, Constants.MAX_STRUCTURE_SIZE);
-        int ySize = Math.min(maxY - minY + 1, Constants.MAX_STRUCTURE_SIZE);
-        int zSize = Math.min(maxZ - minZ + 1, Constants.MAX_STRUCTURE_SIZE);
+        int xSize = Math.min(maxX - minX + 1, MachineConstructionConfig.MACHINE_MAX_SIZE.get());
+        int ySize = Math.min(maxY - minY + 1, MachineConstructionConfig.MACHINE_MAX_SIZE.get());
+        int zSize = Math.min(maxZ - minZ + 1, MachineConstructionConfig.MACHINE_MAX_SIZE.get());
         if (xSize < Constants.MIN_STRUCTURE_SIZE
             || ySize < Constants.MIN_STRUCTURE_SIZE
             || zSize < Constants.MIN_STRUCTURE_SIZE

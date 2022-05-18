@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.blockentity.ModBlockEntities;
 import dev.mattrm.mc.modularmachines.common.item.ModItems;
+import dev.mattrm.mc.modularmachines.setup.Config;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +38,9 @@ public class ModularMachinesMod {
         ModBlocks.register(eventBus);
         ModItems.register(eventBus);
         ModBlockEntities.register(eventBus);
+
+        // Config
+        Config.register();
     }
 
     @SubscribeEvent
