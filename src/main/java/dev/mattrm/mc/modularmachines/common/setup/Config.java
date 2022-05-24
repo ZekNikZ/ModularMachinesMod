@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.setup;
+package dev.mattrm.mc.modularmachines.common.setup;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;

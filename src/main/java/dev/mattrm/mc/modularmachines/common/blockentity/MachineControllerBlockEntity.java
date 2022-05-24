@@ -8,7 +8,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
-import dev.mattrm.mc.modularmachines.setup.MachineConstructionConfig;
+import dev.mattrm.mc.modularmachines.common.setup.MachineConstructionConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;

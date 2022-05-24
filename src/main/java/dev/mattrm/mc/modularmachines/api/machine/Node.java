@@ -4,13 +4,33 @@ import java.util.List;
 
 public abstract class Node {
     private final int id;
+    private final INodeProvider.ControlFlowInput controlFlowState;
 
-    public Node(int id) {
+    public Node(int id, INodeProvider.ControlFlowInput controlFlowState) {
 
         this.id = id;
+        this.controlFlowState = controlFlowState;
     }
 
-    abstract INodeProvider.ControlFlowInput getControlFlowState();
+    protected void addInputPin(Pin pin) {
+
+    }
+
+    protected void addOutputPin(Pin pin) {
+
+    }
+
+    public final INodeProvider.ControlFlowInput getControlFlowState() {
+        return this.controlFlowState;
+    }
+
+    public final List<InputPin> getInputPins() {
+
+    }
+
+    public final List<OutputPin> getOutputPins() {
+
+    }
 
     abstract ControlFlowPin getControlFlowInputPin();
 

@@ -1,0 +1,26 @@
+PinType - registered with custom registry (RESOURCE_ITEM, DATA_INT, DATA_BOOL, CONTROL_FLOW)
+ -> has linked input pin type
+ -> has linked output pin type
+ 
+nodes have declared input and output pins which the blockentity or container link with a list of connections
+when a node is "done", it gets all of its connections and runs `transferData()`
+
+data input pins somehow need a way to have a "default/configured value" which can be something like this:
+
+     +--------+
+     |  Node  |
+ +---|        |
+ | 2 >Data    |
+ +---|        |
+     |        |
+	 +--------+
+   
+   (i.e., a way around having to have dedicated "constant" nodes connected to each)
+   
+GuiWidget registry - I may not need a registry for this but it may help enforcing consistency   
+   
+Nodes register a series of GUI widgets (text, image, integer, block pos, etc.)
+
+(Data) input nodes can register a GUI form widget to be their "default value" editor
+
+Input nodes which don't declare a widget provide null by default 

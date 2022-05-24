@@ -1,7 +1,7 @@
-package dev.mattrm.mc.modularmachines.common.event;
+package dev.mattrm.mc.modularmachines.common.setup;
 
 import dev.mattrm.mc.modularmachines.data.ModDataProvider;
-import dev.mattrm.mc.modularmachines.network.PacketHandler;
+import dev.mattrm.mc.modularmachines.common.network.PacketHandler;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModEventHandler {
+public class CommonSetup {
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(PacketHandler::init);

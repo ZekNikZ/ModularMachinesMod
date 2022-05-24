@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModBlocks {
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
 
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     private static final BlockBehaviour.Properties DISCONNECTED_PROPERTIES = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL);
     private static final BlockBehaviour.Properties CONNECTED_PROPERTIES = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL).strength(-1.0F, 3600000.0F).noDrops().sound(SoundType.METAL);
 

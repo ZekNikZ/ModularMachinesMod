@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.network.packet;
+package dev.mattrm.mc.modularmachines.common.network.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;

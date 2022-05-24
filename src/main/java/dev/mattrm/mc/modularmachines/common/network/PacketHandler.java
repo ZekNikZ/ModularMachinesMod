@@ -1,7 +1,7 @@
-package dev.mattrm.mc.modularmachines.network;
+package dev.mattrm.mc.modularmachines.common.network;
 
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.network.packet.IMMPacket;
+import dev.mattrm.mc.modularmachines.common.network.packet.IMMPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
