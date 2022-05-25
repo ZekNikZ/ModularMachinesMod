@@ -1,31 +1,23 @@
 package dev.mattrm.mc.modularmachines.common.block.controller;
 
+import dev.mattrm.mc.modularmachines.client.gui.ControllerScreen;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineControllerBlock;
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
-import dev.mattrm.mc.modularmachines.common.container.ControllerContainer;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
-import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,24 +41,27 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
-        if (!level.isClientSide) {
-            BlockEntity be = level.getBlockEntity(blockPos);
-            if (be instanceof MachineControllerBlockEntity) {
-                MenuProvider containerProvider = new MenuProvider() {
-                    @Override
-                    public Component getDisplayName() {
-                        return new TranslatableComponent("screen.modularmachines.controller");
-                    }
-
-                    @Override
-                    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
-                        return new ControllerContainer(windowId, blockPos, playerInventory, playerEntity);
-                    }
-                };
-                NetworkHooks.openGui((ServerPlayer) player, containerProvider, be.getBlockPos());
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
+//        if (!level.isClientSide) {
+//            BlockEntity be = level.getBlockEntity(blockPos);
+//            if (be instanceof MachineControllerBlockEntity) {
+//                MenuProvider containerProvider = new MenuProvider() {
+//                    @Override
+//                    public Component getDisplayName() {
+//                        return new TranslatableComponent("screen.modularmachines.controller");
+//                    }
+//
+//                    @Override
+//                    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
+//                        return new ControllerContainer(windowId, blockPos, playerInventory, playerEntity);
+//                    }
+//                };
+//                NetworkHooks.openGui((ServerPlayer) player, containerProvider, be.getBlockPos());
+//            } else {
+//                throw new IllegalStateException("Our named container provider is missing!");
+//            }
+//        }
+        if (level.isClientSide()) {
+            Minecraft.getInstance().setScreen(new ControllerScreen());
         }
         return InteractionResult.SUCCESS;
 

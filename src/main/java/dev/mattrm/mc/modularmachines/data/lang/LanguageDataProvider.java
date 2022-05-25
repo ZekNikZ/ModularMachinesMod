@@ -1,6 +1,7 @@
 package dev.mattrm.mc.modularmachines.data.lang;
 
 import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.client.gui.ModGuiTranslation;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.tab.ModCreativeTabs;
 import net.minecraft.data.DataGenerator;
@@ -34,6 +35,11 @@ public class LanguageDataProvider extends LanguageProvider {
                     this.add("itemGroup." + tab.getLabel(), key);
                 }
             }
+        });
+
+        // GUI
+        ModGuiTranslation.VALUES.forEach(key -> {
+            this.add(key.getTranslationKey(), key.getDefault());
         });
     }
 }

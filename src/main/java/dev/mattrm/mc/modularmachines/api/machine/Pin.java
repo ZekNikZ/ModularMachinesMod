@@ -34,7 +34,7 @@ abstract class InputPin<T> extends Pin {
     // TODO: return GUI widget, null if disabled
     // TODO: figure out how to best do this. probably will be to create an instance of the editor widget here and return it
     // TODO: this approach would let me delete `setFallbackValue` since the linked widget would be conditionally rendered
-    public abstract EditorWidget<T> fallbackWidget();
+//    public abstract EditorWidget<T> fallbackWidget();
     public abstract T fallbackValue();
     public abstract void setFallbackValue(T value);
 

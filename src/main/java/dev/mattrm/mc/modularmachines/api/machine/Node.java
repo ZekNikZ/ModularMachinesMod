@@ -24,21 +24,21 @@ public abstract class Node {
         return this.controlFlowState;
     }
 
-    public final List<InputPin> getInputPins() {
-
+    public final List<InputPin<?>> getInputPins() {
+        return null;
     }
 
-    public final List<OutputPin> getOutputPins() {
-
+    public final List<OutputPin<?, ?>> getOutputPins() {
+        return null;
     }
 
     abstract ControlFlowPin getControlFlowInputPin();
 
     abstract ControlFlowPin getControlFlowOutputPin();
 
-    abstract List<ResourcePin> getResourceInputPins();
+    abstract List<ResourcePin<?>> getResourceInputPins();
 
-    abstract List<ResourcePin> getResourceOutputPins();
+    abstract List<ResourcePin<?>> getResourceOutputPins();
 
     abstract List<DataPin> getDataInputPins();
 

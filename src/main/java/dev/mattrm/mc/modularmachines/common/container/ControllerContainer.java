@@ -13,23 +13,21 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class ControllerContainer extends DataContainerMenu<ControllerContainer.ControllerContainerData> {
-    static class ControllerContainerData {
-        int test = 0;
-    }
-
-    private BlockEntity blockEntity;
-    private Player playerEntity;
-    private IItemHandler playerInventory;
-
-    public ControllerContainer(int id, BlockPos pos, Inventory playerInv, Player player) {
-        super(ModContainers.CONTROLLER.get(), id, pos, playerInv, player, (_pos, _player) -> new ControllerContainerData());
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos()), this.playerEntity, ModBlocks.MACHINE_CONTROLLER.get());
-    }
-
-
-}
+//public class ControllerContainer extends DataContainerMenu<ControllerContainer.ControllerContainerData> {
+//    static class ControllerContainerData {
+//        int test = 0;
+//    }
+//
+//    private BlockEntity blockEntity;
+//    private Player playerEntity;
+//    private IItemHandler playerInventory;
+//
+//    public ControllerContainer(int id, BlockPos pos, Inventory playerInv, Player player) {
+//        super(ModContainers.CONTROLLER.get(), id, pos, playerInv, player, (_pos, _player) -> new ControllerContainerData());
+//    }
+//
+//    @Override
+//    public boolean stillValid(Player pPlayer) {
+//        return stillValid(ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos()), this.playerEntity, ModBlocks.MACHINE_CONTROLLER.get());
+//    }
+//}
