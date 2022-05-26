@@ -17,7 +17,7 @@ public class ControllerScreen extends Screen {
     private double zoom = 1;
 
     private static final ResourceLocation TEST_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/test_stretch.png");
-    private static final StretchableTexture STRETCHABLE_TEXTURE = new StretchableTexture(TEST_TEXTURE, 48, 48, 16);
+    private static final StretchableTexture STRETCHABLE_TEXTURE = new StretchableTexture(TEST_TEXTURE, 0, 0, 48, 48, 16);
 
     public ControllerScreen() {
         super(ModGuiTranslation.CONTROLLER_GUI.component());
@@ -25,13 +25,10 @@ public class ControllerScreen extends Screen {
 
     @Override
     public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-//        pPoseStack.pushPose();
-//        pPoseStack.scale(0.5f, 0.5f, 0.5f);
         this.renderBackground(pPoseStack);
         this.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY);
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
         this.renderFg(pPoseStack, pPartialTick, pMouseX, pMouseY);
-//        pPoseStack.popPose();
     }
 
     protected void renderBg(@NotNull PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
@@ -58,7 +55,7 @@ public class ControllerScreen extends Screen {
         final int relMouseX = (int) (pMouseX / this.zoom - this.scrollX);
         final int relMouseY = (int) (pMouseY / this.zoom - this.scrollY);
 
-        STRETCHABLE_TEXTURE.render(pPoseStack, 100, 10, 100, 100);
+        STRETCHABLE_TEXTURE.render(pPoseStack, 100, 10, Math.max(0, pMouseX - 100), Math.max(0, pMouseY - 10));
 
         this.font.draw(pPoseStack, "Zoom: " + this.zoom, 10, 10, 0);
         this.font.draw(pPoseStack, "X: " + this.scrollX, 10, 20, 0);
@@ -78,8 +75,8 @@ public class ControllerScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        double deltaZoom = delta / 10;
-        double newZoom = Mth.clamp(this.zoom + deltaZoom, 0.25, 2);
+        double deltaZoom = delta / 20;
+        double newZoom = Mth.clamp(this.zoom + deltaZoom, 0.1, 2);
 
         // TODO: make this zoom in/out from the center, not the corner
         this.zoom = newZoom;
