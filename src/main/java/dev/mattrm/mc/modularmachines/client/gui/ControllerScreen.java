@@ -3,6 +3,9 @@ package dev.mattrm.mc.modularmachines.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
+import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
+import dev.mattrm.mc.modularmachines.api.machine.Node;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -16,11 +19,17 @@ public class ControllerScreen extends Screen {
     private double scrollY = 0;
     private double zoom = 1;
 
-    private static final ResourceLocation TEST_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/test_stretch.png");
-    private static final StretchableTexture STRETCHABLE_TEXTURE = new StretchableTexture(TEST_TEXTURE, 0, 0, 48, 48, 16);
+    private final Node node;
 
     public ControllerScreen() {
         super(ModGuiTranslation.CONTROLLER_GUI.component());
+        this.node = new Node(0, Node.ControlFlowInput.DISABLED) {
+            @Override
+            protected void initComponents() {
+                this.addComponent(new SimpleTextNodeComponent("Test 1"));
+                this.addComponent(new SimpleTextNodeComponent("Test 2"));
+            }
+        };
     }
 
     @Override
@@ -55,7 +64,11 @@ public class ControllerScreen extends Screen {
         final int relMouseX = (int) (pMouseX / this.zoom - this.scrollX);
         final int relMouseY = (int) (pMouseY / this.zoom - this.scrollY);
 
-        STRETCHABLE_TEXTURE.render(pPoseStack, 100, 10, Math.max(0, pMouseX - 100), Math.max(0, pMouseY - 10));
+        pPoseStack.pushPose();
+        pPoseStack.scale((float) this.zoom, (float) this.zoom, (float) this.zoom);
+        pPoseStack.translate(100 + (int) this.scrollX, 10 + (int) this.scrollY, 0);
+        this.node.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        pPoseStack.popPose();
 
         this.font.draw(pPoseStack, "Zoom: " + this.zoom, 10, 10, 0);
         this.font.draw(pPoseStack, "X: " + this.scrollX, 10, 20, 0);
@@ -93,6 +106,6 @@ public class ControllerScreen extends Screen {
 
     @Override
     protected void init() {
-//         this.addRenderableWidget();
+        // this.addRenderableWidget();
     }
 }
