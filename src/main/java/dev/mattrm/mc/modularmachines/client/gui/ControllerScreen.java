@@ -3,6 +3,7 @@ package dev.mattrm.mc.modularmachines.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
 import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
@@ -18,7 +19,6 @@ public class ControllerScreen extends Screen {
     private double scrollX = 0;
     private double scrollY = 0;
     private double zoom = 1;
-
     private final Node node;
 
     public ControllerScreen() {
@@ -88,20 +88,86 @@ public class ControllerScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        double deltaZoom = delta / 20;
-        double newZoom = Mth.clamp(this.zoom + deltaZoom, 0.1, 2);
+        if (!ControllerScreenState.isZoomingLocked()) {
+            double deltaZoom = delta / 20;
+            double newZoom = Mth.clamp(this.zoom + deltaZoom, 0.1, 2);
 
-        // TODO: make this zoom in/out from the center, not the corner
-        this.zoom = newZoom;
+            // TODO: make this zoom in/out from the center, not the corner
+            this.zoom = newZoom;
 
-        return true;
+            return true; // TODO: is this correct?
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        this.scrollX += pDragX / this.zoom;
-        this.scrollY += pDragY / this.zoom;
+        // TODO: account for holding only the left button
+        if (!ControllerScreenState.isPanningLocked()) {
+            this.scrollX += pDragX / this.zoom;
+            this.scrollY += pDragY / this.zoom;
+
+            return true; // TODO: is this correct?
+        }
+
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    }
+
+    @Override
+    public void mouseMoved(double pMouseX, double pMouseY) {
+        // TODO: fully implement
+        final double relMouseX = pMouseX / this.zoom - this.scrollX;
+        final double relMouseY = pMouseY / this.zoom - this.scrollY;
+        final double xOffset = 100;
+        final double yOffset = 10;
+        if (node.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
+            if (!node.isHovered()) {
+                node.setHovered(true);
+                node.mouseHoverStart();
+            }
+        } else {
+            if (node.isHovered()) {
+                node.setHovered(false);
+                node.mouseHoverEnd();
+            }
+        }
+
+        node.mouseMoved(relMouseX - xOffset, relMouseY - yOffset);
+    }
+
+    @Override
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        // TODO: fully implement
+        int xOffset = 100 + (int) this.scrollX;
+        int yOffset = 10 + (int) this.scrollY;
+        return node.mouseClicked(pMouseX - xOffset, pMouseY - yOffset, pButton);
+    }
+
+    @Override
+    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+        // TODO: fully implement
+        int xOffset = 100 + (int) this.scrollX;
+        int yOffset = 10 + (int) this.scrollY;
+        return node.mouseReleased(pMouseX - xOffset, pMouseY - yOffset, pButton);
+    }
+
+    @Override
+    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        // TODO: fully implement
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+    }
+
+    @Override
+    public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
+        // TODO: fully implement
+        return super.keyReleased(pKeyCode, pScanCode, pModifiers);
+    }
+
+    @Override
+    public boolean charTyped(char pCodePoint, int pModifiers) {
+        // TODO: fully implement
+        return super.charTyped(pCodePoint, pModifiers);
     }
 
     @Override

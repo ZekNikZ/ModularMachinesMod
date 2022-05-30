@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+// https://www.toptal.com/developers/hastebin/hicefopuce.json
 public class MachineControllerBlockEntity extends BlockEntity {
     private boolean connected = false;
     private BlockPos corner1 = BlockPos.ZERO;

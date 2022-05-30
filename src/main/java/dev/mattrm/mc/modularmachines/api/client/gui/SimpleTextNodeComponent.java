@@ -3,10 +3,10 @@ package dev.mattrm.mc.modularmachines.api.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
-public class SimpleTextNodeComponent implements INodeComponent {
+public class SimpleTextNodeComponent extends NodeComponent {
     private final String text;
     private final boolean shadow;
-    private final int color;
+    private int color;
 
     public SimpleTextNodeComponent(String text) {
         this(text, false, 0);
@@ -35,5 +35,15 @@ public class SimpleTextNodeComponent implements INodeComponent {
         } else {
             Minecraft.getInstance().font.draw(poseStack, this.text, 0, 0, this.color);
         }
+    }
+
+    @Override
+    public void mouseHoverStart() {
+        this.color = 0xFF0000;
+    }
+
+    @Override
+    public void mouseHoverEnd() {
+        this.color = 0;
     }
 }

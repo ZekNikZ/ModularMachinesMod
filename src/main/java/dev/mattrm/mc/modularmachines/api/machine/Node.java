@@ -2,14 +2,16 @@ package dev.mattrm.mc.modularmachines.api.machine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.api.client.gui.INodeComponent;
+import dev.mattrm.mc.modularmachines.api.client.gui.AbstractFocusableEventListener;
+import dev.mattrm.mc.modularmachines.api.client.gui.FocusableEventListener;
+import dev.mattrm.mc.modularmachines.api.client.gui.NodeComponent;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Node {
+public abstract class Node extends AbstractFocusableEventListener {
     public enum ControlFlowInput {
         /**
          * No input pin and no automatic control flow.
@@ -57,7 +59,7 @@ public abstract class Node {
     private final ControlFlowInput controlFlowState;
     private final List<InputPin<?>> inputPins = new ArrayList<>();
     private final List<OutputPin<?, ?>> outputPins = new ArrayList<>();
-    private final List<INodeComponent> components = new ArrayList<>();
+    private final List<NodeComponent> components = new ArrayList<>();
 
     public Node(int id, ControlFlowInput controlFlowState) {
         this.id = id;
@@ -66,9 +68,7 @@ public abstract class Node {
         this.initComponents();
     }
 
-    protected void initComponents() {
-
-    }
+    abstract protected void initComponents();
 
     protected void addInputPin(InputPin<?> pin) {
         this.inputPins.add(pin);
@@ -90,13 +90,13 @@ public abstract class Node {
         return this.outputPins;
     }
 
-    protected final void addComponent(INodeComponent component) {
+    protected final void addComponent(NodeComponent component) {
         this.components.add(component);
     }
 
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        final int componentMaxWidth = this.components.stream().mapToInt(INodeComponent::getWidth).max().orElse(0);
-        final int componentTotalHeight = this.components.stream().mapToInt(INodeComponent::getHeight).sum();
+        final int componentMaxWidth = this.components.stream().mapToInt(NodeComponent::getWidth).max().orElse(0);
+        final int componentTotalHeight = this.components.stream().mapToInt(NodeComponent::getHeight).sum();
         final int totalWidth = componentMaxWidth + 2 * NODE_PADDING;
         final int totalHeight = componentTotalHeight + (this.components.size() - 1) * COMPONENT_PADDING + 2 * NODE_PADDING;
 
@@ -116,7 +116,7 @@ public abstract class Node {
 
     protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth) {
         int y = 0;
-        for (INodeComponent comp : this.components) {
+        for (NodeComponent comp : this.components) {
             poseStack.pushPose();
             poseStack.translate(0, y, 0);
             comp.render(poseStack, mouseX, mouseY, partialTick, fullWidth);
@@ -128,5 +128,138 @@ public abstract class Node {
 
     public final int getId() {
         return this.id;
+    }
+
+    @Override
+    public boolean bypassFocus() {
+        return true;
+    }
+
+    @Override
+    public boolean isMouseOver(double relMouseX, double relMouseY) {
+        final int xOffset = NODE_PADDING;
+        int yOffset = NODE_PADDING;
+        for (NodeComponent comp : this.components) {
+            boolean res = comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset);
+            if (res) {
+                return true;
+            }
+
+            yOffset += comp.getHeight() + COMPONENT_PADDING;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void mouseMoved(double relMouseX, double relMouseY) {
+        final int xOffset = NODE_PADDING;
+        int yOffset = NODE_PADDING;
+        for (NodeComponent comp : this.components) {
+            if (comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
+                if (!comp.isHovered()) {
+                    comp.setHovered(true);
+                    comp.mouseHoverStart();
+                }
+            } else {
+                if (comp.isHovered()) {
+                    comp.setHovered(false);
+                    comp.mouseHoverEnd();
+                }
+            }
+
+            comp.mouseMoved(relMouseX - xOffset, relMouseY - yOffset);
+
+            yOffset += comp.getHeight() + COMPONENT_PADDING;
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double relMouseX, double relMouseY, int button) {
+        // TODO: apply focus
+        final int xOffset = NODE_PADDING;
+        int yOffset = NODE_PADDING;
+        for (NodeComponent comp : this.components) {
+            if (!comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
+                continue;
+            }
+
+            boolean res = comp.mouseClicked(relMouseX - xOffset, relMouseY - yOffset, button);
+            if (res) {
+                return true;
+            }
+
+            yOffset += comp.getHeight() + COMPONENT_PADDING;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean mouseReleased(double relMouseX, double relMouseY, int button) {
+        final int xOffset = NODE_PADDING;
+        int yOffset = NODE_PADDING;
+        for (NodeComponent comp : this.components) {
+            if (!comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
+                continue;
+            }
+
+            boolean res = comp.mouseReleased(relMouseX - xOffset, relMouseY - yOffset, button);
+            if (res) {
+                return true;
+            }
+
+            yOffset += comp.getHeight() + COMPONENT_PADDING;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        for (NodeComponent comp : this.components) {
+            if (!comp.isFocused() && !comp.bypassFocus()) {
+                continue;
+            }
+
+            boolean res = comp.keyPressed(keyCode, scanCode, modifiers);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        for (NodeComponent comp : this.components) {
+            if (!comp.isFocused() && !comp.bypassFocus()) {
+                continue;
+            }
+
+            boolean res = comp.keyReleased(keyCode, scanCode, modifiers);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        for (NodeComponent comp : this.components) {
+            if (!comp.isFocused() && !comp.bypassFocus()) {
+                continue;
+            }
+
+            boolean res = comp.charTyped(codePoint, modifiers);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
