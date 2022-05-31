@@ -3,7 +3,6 @@ package dev.mattrm.mc.modularmachines.api.machine;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.AbstractFocusableEventListener;
-import dev.mattrm.mc.modularmachines.api.client.gui.FocusableEventListener;
 import dev.mattrm.mc.modularmachines.api.client.gui.NodeComponent;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -60,6 +59,9 @@ public abstract class Node extends AbstractFocusableEventListener {
     private final List<InputPin<?>> inputPins = new ArrayList<>();
     private final List<OutputPin<?, ?>> outputPins = new ArrayList<>();
     private final List<NodeComponent> components = new ArrayList<>();
+
+    private int x = 0;
+    private int y = 0;
 
     public Node(int id, ControlFlowInput controlFlowState) {
         this.id = id;
@@ -261,5 +263,21 @@ public abstract class Node extends AbstractFocusableEventListener {
         }
 
         return false;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

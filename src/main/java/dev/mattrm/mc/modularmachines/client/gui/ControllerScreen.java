@@ -13,23 +13,40 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class ControllerScreen extends Screen {
     private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/blueprint.png");
     private static final int TEXTURE_SIZE = 256;
     private double scrollX = 0;
     private double scrollY = 0;
     private double zoom = 1;
-    private final Node node;
+    private final List<Node> nodes;
 
     public ControllerScreen() {
         super(ModGuiTranslation.CONTROLLER_GUI.component());
-        this.node = new Node(0, Node.ControlFlowInput.DISABLED) {
-            @Override
-            protected void initComponents() {
-                this.addComponent(new SimpleTextNodeComponent("Test 1"));
-                this.addComponent(new SimpleTextNodeComponent("Test 2"));
+
+        // TODO: DEBUG
+        this.nodes = List.of(
+            new Node(0, Node.ControlFlowInput.DISABLED) {
+                @Override
+                protected void initComponents() {
+                    this.addComponent(new SimpleTextNodeComponent("Test 1"));
+                    this.addComponent(new SimpleTextNodeComponent("Test 2"));
+                }
+            },
+            new Node(1, Node.ControlFlowInput.DISABLED) {
+                @Override
+                protected void initComponents() {
+                    this.addComponent(new SimpleTextNodeComponent("Test 3"));
+                    this.addComponent(new SimpleTextNodeComponent("Test 4"));
+                }
             }
-        };
+        );
+        this.nodes.get(0).setX(100);
+        this.nodes.get(0).setY(10);
+        this.nodes.get(1).setX(100);
+        this.nodes.get(1).setY(100);
     }
 
     @Override
@@ -64,11 +81,13 @@ public class ControllerScreen extends Screen {
         final int relMouseX = (int) (pMouseX / this.zoom - this.scrollX);
         final int relMouseY = (int) (pMouseY / this.zoom - this.scrollY);
 
-        pPoseStack.pushPose();
-        pPoseStack.scale((float) this.zoom, (float) this.zoom, (float) this.zoom);
-        pPoseStack.translate(100 + (int) this.scrollX, 10 + (int) this.scrollY, 0);
-        this.node.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        pPoseStack.popPose();
+        this.getNodes().forEach(node -> {
+            pPoseStack.pushPose();
+            pPoseStack.scale((float) this.zoom, (float) this.zoom, (float) this.zoom);
+            pPoseStack.translate(node.getX() + (int) this.scrollX, node.getY() + (int) this.scrollY, 0);
+            node.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            pPoseStack.popPose();
+        });
 
         this.font.draw(pPoseStack, "Zoom: " + this.zoom, 10, 10, 0);
         this.font.draw(pPoseStack, "X: " + this.scrollX, 10, 20, 0);
@@ -76,6 +95,11 @@ public class ControllerScreen extends Screen {
         this.font.draw(pPoseStack, "Rel. Mouse X: " + relMouseX, 10, 40, 0);
         this.font.draw(pPoseStack, "Rel. Mouse Y: " + relMouseY, 10, 50, 0);
         this.font.draw(pPoseStack, "Partial Tick: " + pPartialTick, 10, 60, 0);
+    }
+
+    private Iterable<Node> getNodes() {
+        // TODO: fix
+        return this.nodes;
     }
 
     private int screenWidth() {
@@ -92,10 +116,15 @@ public class ControllerScreen extends Screen {
             double deltaZoom = delta / 20;
             double newZoom = Mth.clamp(this.zoom + deltaZoom, 0.1, 2);
 
-            // TODO: make this zoom in/out from the center, not the corner
+            // Zoom about mouse location by making sure that the relative mouse coordinates
+            // stay in the same place after the zoom
+            double relMouseX = mouseX / this.zoom - this.scrollX;
+            double relMouseY = mouseY / this.zoom - this.scrollY;
             this.zoom = newZoom;
+            this.scrollX = mouseX / this.zoom - relMouseX;
+            this.scrollY = mouseY / this.zoom - relMouseY;
 
-            return true; // TODO: is this correct?
+            return true;
         }
 
         return super.mouseScrolled(mouseX, mouseY, delta);
@@ -108,7 +137,7 @@ public class ControllerScreen extends Screen {
             this.scrollX += pDragX / this.zoom;
             this.scrollY += pDragY / this.zoom;
 
-            return true; // TODO: is this correct?
+            return true;
         }
 
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
@@ -116,58 +145,115 @@ public class ControllerScreen extends Screen {
 
     @Override
     public void mouseMoved(double pMouseX, double pMouseY) {
-        // TODO: fully implement
         final double relMouseX = pMouseX / this.zoom - this.scrollX;
         final double relMouseY = pMouseY / this.zoom - this.scrollY;
-        final double xOffset = 100;
-        final double yOffset = 10;
-        if (node.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
-            if (!node.isHovered()) {
-                node.setHovered(true);
-                node.mouseHoverStart();
+        this.getNodes().forEach(node -> {
+            final double xOffset = node.getX();
+            final double yOffset = node.getY();
+            if (node.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
+                if (!node.isHovered()) {
+                    node.setHovered(true);
+                    node.mouseHoverStart();
+                }
+            } else {
+                if (node.isHovered()) {
+                    node.setHovered(false);
+                    node.mouseHoverEnd();
+                }
             }
-        } else {
-            if (node.isHovered()) {
-                node.setHovered(false);
-                node.mouseHoverEnd();
-            }
-        }
 
-        node.mouseMoved(relMouseX - xOffset, relMouseY - yOffset);
+            node.mouseMoved(relMouseX - xOffset, relMouseY - yOffset);
+        });
     }
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        // TODO: fully implement
-        int xOffset = 100 + (int) this.scrollX;
-        int yOffset = 10 + (int) this.scrollY;
-        return node.mouseClicked(pMouseX - xOffset, pMouseY - yOffset, pButton);
+        for (Node node : this.getNodes()) {
+            int xOffset = node.getX() + (int) this.scrollX;
+            int yOffset = node.getY() + (int) this.scrollY;
+            double relMouseX = pMouseX - xOffset;
+            double relMouseY = pMouseY - yOffset;
+
+            if (!node.isMouseOver(relMouseX, relMouseY)) {
+                continue;
+            }
+
+            boolean res = node.mouseClicked(relMouseX, relMouseY, pButton);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        // TODO: fully implement
-        int xOffset = 100 + (int) this.scrollX;
-        int yOffset = 10 + (int) this.scrollY;
-        return node.mouseReleased(pMouseX - xOffset, pMouseY - yOffset, pButton);
+        for (Node node : this.getNodes()) {
+            int xOffset = node.getX() + (int) this.scrollX;
+            int yOffset = node.getY() + (int) this.scrollY;
+            double relMouseX = pMouseX - xOffset;
+            double relMouseY = pMouseY - yOffset;
+
+            if (!node.isMouseOver(relMouseX, relMouseY)) {
+                continue;
+            }
+
+            boolean res = node.mouseReleased(relMouseX, relMouseY, pButton);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        // TODO: fully implement
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+        for (Node node : this.getNodes()) {
+            if (!node.isFocused() && !node.bypassFocus()) {
+                continue;
+            }
+
+            boolean res = node.keyPressed(pKeyCode, pScanCode, pModifiers);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-        // TODO: fully implement
-        return super.keyReleased(pKeyCode, pScanCode, pModifiers);
+        for (Node node : this.getNodes()) {
+            if (!node.isFocused() && !node.bypassFocus()) {
+                continue;
+            }
+
+            boolean res = node.keyReleased(pKeyCode, pScanCode, pModifiers);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean charTyped(char pCodePoint, int pModifiers) {
-        // TODO: fully implement
-        return super.charTyped(pCodePoint, pModifiers);
+        for (Node node : this.getNodes()) {
+            if (!node.isFocused() && !node.bypassFocus()) {
+                continue;
+            }
+
+            boolean res = node.charTyped(pCodePoint, pModifiers);
+            if (res) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
