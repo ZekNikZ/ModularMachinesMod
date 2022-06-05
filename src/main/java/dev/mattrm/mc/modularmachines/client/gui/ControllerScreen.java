@@ -7,10 +7,13 @@ import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
 import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -184,7 +187,7 @@ public class ControllerScreen extends Screen {
             }
         }
 
-        return false;
+        return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
     @Override
@@ -205,7 +208,7 @@ public class ControllerScreen extends Screen {
             }
         }
 
-        return false;
+        return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
 
     @Override
@@ -221,7 +224,8 @@ public class ControllerScreen extends Screen {
             }
         }
 
-        return false;
+        // Need t
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
     @Override
@@ -237,7 +241,7 @@ public class ControllerScreen extends Screen {
             }
         }
 
-        return false;
+        return super.keyReleased(pKeyCode, pScanCode, pModifiers);
     }
 
     @Override
@@ -253,11 +257,19 @@ public class ControllerScreen extends Screen {
             }
         }
 
-        return false;
+        return super.charTyped(pCodePoint, pModifiers);
     }
 
     @Override
     protected void init() {
         // this.addRenderableWidget();
+    }
+
+    public static void safeOpen() {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ControllerScreen::open);
+    }
+
+    public static void open() {
+        Minecraft.getInstance().setScreen(new ControllerScreen());
     }
 }

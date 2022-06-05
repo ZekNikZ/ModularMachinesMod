@@ -6,7 +6,6 @@ import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineControllerBloc
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -18,6 +17,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +62,7 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
 //            }
 //        }
         if (level.isClientSide()) {
-            Minecraft.getInstance().setScreen(new ControllerScreen());
+            ControllerScreen.safeOpen();
         }
         return InteractionResult.SUCCESS;
 
