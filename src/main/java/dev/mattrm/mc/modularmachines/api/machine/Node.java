@@ -4,6 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.AbstractFocusableEventListener;
 import dev.mattrm.mc.modularmachines.api.client.gui.NodeComponent;
+import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
+import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
+import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowInputPin;
+import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowOutputPin;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Node extends AbstractFocusableEventListener {
+    private INodeManager manager;
+
     public enum ControlFlowInput {
         /**
          * No input pin and no automatic control flow.
@@ -50,12 +56,36 @@ public abstract class Node extends AbstractFocusableEventListener {
         }
     }
 
+    public enum ControlFlowOutput {
+        /**
+         * No input pin and no automatic control flow.
+         * Example: external machine nodes
+         */
+        DISABLED(false, false),
+        /**
+         * Input pin and no automatic control flow.
+         * Example: conditional nodes
+         */
+        ENABLED(true, false);
+
+        private final boolean outputPin;
+
+        ControlFlowOutput(boolean inputPin, boolean automatic) {
+            this.outputPin = inputPin;
+        }
+
+        public boolean hasOutputPin() {
+            return this.outputPin;
+        }
+    }
+
     private static final int NODE_PADDING = 10;
     private static final int COMPONENT_PADDING = 5;
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/node.png");
     private static final StretchableTexture BACKGROUND_TEXTURE = new StretchableTexture(BACKGROUND_LOCATION, 0, 0, 48, 48, 16);
     private final int id;
-    private final ControlFlowInput controlFlowState;
+    private final ControlFlowInput controlFlowInputState;
+    private final ControlFlowOutput controlFlowOutputState;
     private final List<InputPin<?>> inputPins = new ArrayList<>();
     private final List<OutputPin<?, ?>> outputPins = new ArrayList<>();
     private final List<NodeComponent> components = new ArrayList<>();
@@ -63,9 +93,19 @@ public abstract class Node extends AbstractFocusableEventListener {
     private int x = 0;
     private int y = 0;
 
-    public Node(int id, ControlFlowInput controlFlowState) {
+    public Node(INodeManager manager, int id, ControlFlowInput controlFlowInputState, ControlFlowOutput controlFlowOutputState) {
+        this.manager = manager;
         this.id = id;
-        this.controlFlowState = controlFlowState;
+        this.controlFlowInputState = controlFlowInputState;
+        this.controlFlowOutputState = controlFlowOutputState;
+
+        if (this.controlFlowInputState.hasInputPin()) {
+            this.addInputPin(new ControlFlowInputPin(this));
+        }
+
+        if (this.controlFlowOutputState.hasOutputPin()) {
+            this.addOutputPin(new ControlFlowOutputPin());
+        }
 
         this.initComponents();
     }
@@ -80,8 +120,12 @@ public abstract class Node extends AbstractFocusableEventListener {
         this.outputPins.add(pin);
     }
 
-    public final ControlFlowInput getControlFlowState() {
-        return this.controlFlowState;
+    public final ControlFlowInput getControlFlowInputState() {
+        return this.controlFlowInputState;
+    }
+
+    public final ControlFlowOutput getControlFlowOutputState() {
+        return this.controlFlowOutputState;
     }
 
     public final List<InputPin<?>> getInputPins() {
@@ -279,5 +323,32 @@ public abstract class Node extends AbstractFocusableEventListener {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public final void activate() {
+        if (!this.activationAllowed()) return;
+        if (!this.activateNode()) return;
+        this.activateConnections();
+    }
+
+    /**
+     * Check whether this node can be activated before actually activating it.
+     *
+     * @return whether to go through with the activation
+     */
+    public boolean activationAllowed() {
+        return true;
+    }
+
+    /**
+     * Perform activation logic.
+     *
+     * @return whether this node should provide control flow to connected nodes
+     */
+    public abstract boolean activateNode();
+
+    public void activateConnections() {
+        // TODO: this is a stupid way to do this, figure out a better way
+        this.manager.activateConnections(this);
     }
 }
