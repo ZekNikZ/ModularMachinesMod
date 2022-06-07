@@ -5,11 +5,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
 import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
-import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,9 +19,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ControllerScreen extends Screen {
-    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/blueprint.png");
+public class ControllerScreen extends Screen implements IControllerRenderContext {
+    private static final ResourceLocation BG_TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/blueprint.png");
+    private static final ResourceLocation NODE_FONT_LOCATION = new ResourceLocation(Constants.MOD_ID, "smooth");
     private static final int TEXTURE_SIZE = 256;
+    private static final Style TEXT_STYLE = Style.EMPTY.withFont(NODE_FONT_LOCATION);
     private double scrollX = 0;
     private double scrollY = 0;
     private double zoom = 1;
@@ -31,18 +34,40 @@ public class ControllerScreen extends Screen {
 
         // TODO: DEBUG
         this.nodes = List.of(
-            new Node(0, Node.ControlFlowInput.DISABLED) {
+            new Node(null, 0, Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.DISABLED) {
                 @Override
                 protected void initComponents() {
                     this.addComponent(new SimpleTextNodeComponent("Test 1"));
                     this.addComponent(new SimpleTextNodeComponent("Test 2"));
                 }
+
+                @Override
+                public boolean activateNode() {
+                    return true;
+                }
             },
-            new Node(1, Node.ControlFlowInput.DISABLED) {
+            new Node(null, 1, Node.ControlFlowInput.DISABLED, Node.ControlFlowOutput.ENABLED) {
                 @Override
                 protected void initComponents() {
                     this.addComponent(new SimpleTextNodeComponent("Test 3"));
                     this.addComponent(new SimpleTextNodeComponent("Test 4"));
+                }
+
+                @Override
+                public boolean activateNode() {
+                    return true;
+                }
+            },
+            new Node(null, 2, Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.ENABLED) {
+                @Override
+                protected void initComponents() {
+                    this.addComponent(new SimpleTextNodeComponent("Test 3"));
+                    this.addComponent(new SimpleTextNodeComponent("Test 4"));
+                }
+
+                @Override
+                public boolean activateNode() {
+                    return true;
                 }
             }
         );
@@ -50,6 +75,8 @@ public class ControllerScreen extends Screen {
         this.nodes.get(0).setY(10);
         this.nodes.get(1).setX(100);
         this.nodes.get(1).setY(100);
+        this.nodes.get(2).setX(100);
+        this.nodes.get(2).setY(200);
     }
 
     @Override
@@ -69,7 +96,7 @@ public class ControllerScreen extends Screen {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BG_TEXTURE);
+        RenderSystem.setShaderTexture(0, BG_TEXTURE_LOCATION);
         pPoseStack.pushPose();
         pPoseStack.scale((float) this.zoom, (float) this.zoom, (float) this.zoom);
         for (int i = -1; i <= TILES_ACROSS + 1; i++) {
@@ -88,16 +115,16 @@ public class ControllerScreen extends Screen {
             pPoseStack.pushPose();
             pPoseStack.scale((float) this.zoom, (float) this.zoom, (float) this.zoom);
             pPoseStack.translate(node.getX() + (int) this.scrollX, node.getY() + (int) this.scrollY, 0);
-            node.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            node.render(pPoseStack, pMouseX, pMouseY, pPartialTick, this);
             pPoseStack.popPose();
         });
 
-        this.font.draw(pPoseStack, "Zoom: " + this.zoom, 10, 10, 0);
-        this.font.draw(pPoseStack, "X: " + this.scrollX, 10, 20, 0);
-        this.font.draw(pPoseStack, "Y: " + this.scrollY, 10, 30, 0);
-        this.font.draw(pPoseStack, "Rel. Mouse X: " + relMouseX, 10, 40, 0);
-        this.font.draw(pPoseStack, "Rel. Mouse Y: " + relMouseY, 10, 50, 0);
-        this.font.draw(pPoseStack, "Partial Tick: " + pPartialTick, 10, 60, 0);
+        this.font.draw(pPoseStack, text("Zoom: " + this.zoom), 10, 10, 0);
+        this.font.draw(pPoseStack, text("X: " + this.scrollX), 10, 20, 0);
+        this.font.draw(pPoseStack, text("Y: " + this.scrollY), 10, 30, 0);
+        this.font.draw(pPoseStack, text("Rel. Mouse X: " + relMouseX), 10, 40, 0);
+        this.font.draw(pPoseStack, text("Rel. Mouse Y: " + relMouseY), 10, 50, 0);
+        this.font.draw(pPoseStack, text("Partial Tick: " + pPartialTick), 10, 60, 0);
     }
 
     private Iterable<Node> getNodes() {
@@ -271,5 +298,14 @@ public class ControllerScreen extends Screen {
 
     public static void open() {
         Minecraft.getInstance().setScreen(new ControllerScreen());
+    }
+
+    public Font font() {
+        return this.font;
+    }
+
+    @Override
+    public Style textStyle() {
+        return TEXT_STYLE;
     }
 }

@@ -31,4 +31,9 @@ public class ControlFlowOutputPin extends OutputPin<ControlFlowInputPin.ControlF
     public int maxConnections() {
         return -1;
     }
+
+    @Override
+    public String name() {
+        return "Flow Out";
+    }
 }

@@ -1,9 +1,13 @@
 package dev.mattrm.mc.modularmachines.api.machine;
 
 import java.util.Map;
-import java.util.function.Function;
 
 public interface INodeProvider {
+    @FunctionalInterface
+    interface NodeConstructor<N extends Node> {
+        N apply(INodeManager manager, int id);
+    }
+
     /**
      * Returns a map of Node names to constructors. If this provider needs to keep
      * track of these nodes, return a function to create the node and store
@@ -14,5 +18,5 @@ public interface INodeProvider {
      *
      * @return a map of Node constructors
      */
-    Map<String, Function<Integer, Node>> getNodeBuilders();
+    Map<String, NodeConstructor<?>> getNodeBuilders();
 }

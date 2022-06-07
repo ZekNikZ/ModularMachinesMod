@@ -52,4 +52,9 @@ public class ControlFlowInputPin extends InputPin<ControlFlowInputPin.ControlFlo
     public int maxConnections() {
         return -1;
     }
+
+    @Override
+    public String name() {
+        return "Flow In";
+    }
 }

@@ -1,6 +1,7 @@
 package dev.mattrm.mc.modularmachines.api.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
 import net.minecraft.client.Minecraft;
 
 public class SimpleTextNodeComponent extends NodeComponent {
@@ -29,11 +30,11 @@ public class SimpleTextNodeComponent extends NodeComponent {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth, IControllerRenderContext ctx) {
         if (this.shadow) {
-            Minecraft.getInstance().font.drawShadow(poseStack, this.text, 0, 0, this.color);
+            ctx.drawStringShadow(poseStack, this.text, 0, 0, this.color);
         } else {
-            Minecraft.getInstance().font.draw(poseStack, this.text, 0, 0, this.color);
+            ctx.drawString(poseStack, this.text, 0, 0, this.color);
         }
     }
 

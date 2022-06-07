@@ -5,6 +5,8 @@ import net.minecraft.resources.ResourceLocation;
 import java.awt.*;
 
 public abstract class Pin<T> {
+    public abstract String name();
+
     public enum PinType {
         /**
          * An INPUT pin, meaning that it accepts input from output pins.

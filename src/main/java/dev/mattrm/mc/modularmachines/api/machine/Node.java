@@ -4,10 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.AbstractFocusableEventListener;
 import dev.mattrm.mc.modularmachines.api.client.gui.NodeComponent;
+import dev.mattrm.mc.modularmachines.api.client.gui.PinComponent;
 import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowInputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowOutputPin;
+import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
 import net.minecraft.resources.ResourceLocation;
 
@@ -108,6 +110,7 @@ public abstract class Node extends AbstractFocusableEventListener {
         }
 
         this.initComponents();
+        this.addComponent(new PinComponent(this));
     }
 
     abstract protected void initComponents();
@@ -140,7 +143,7 @@ public abstract class Node extends AbstractFocusableEventListener {
         this.components.add(component);
     }
 
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, IControllerRenderContext ctx) {
         final int componentMaxWidth = this.components.stream().mapToInt(NodeComponent::getWidth).max().orElse(0);
         final int componentTotalHeight = this.components.stream().mapToInt(NodeComponent::getHeight).sum();
         final int totalWidth = componentMaxWidth + 2 * NODE_PADDING;
@@ -152,7 +155,7 @@ public abstract class Node extends AbstractFocusableEventListener {
         // Render components
         poseStack.pushPose();
         poseStack.translate(NODE_PADDING, NODE_PADDING, 0);
-        this.renderForeground(poseStack, mouseX, mouseY, partialTick, componentMaxWidth);
+        this.renderForeground(poseStack, mouseX, mouseY, partialTick, componentMaxWidth, ctx);
         poseStack.popPose();
     }
 
@@ -160,12 +163,12 @@ public abstract class Node extends AbstractFocusableEventListener {
         BACKGROUND_TEXTURE.render(poseStack, 0, 0, totalWidth, totalHeight);
     }
 
-    protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth) {
+    protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth, IControllerRenderContext ctx) {
         int y = 0;
         for (NodeComponent comp : this.components) {
             poseStack.pushPose();
             poseStack.translate(0, y, 0);
-            comp.render(poseStack, mouseX, mouseY, partialTick, fullWidth);
+            comp.render(poseStack, mouseX, mouseY, partialTick, fullWidth, ctx);
             poseStack.popPose();
 
             y += comp.getHeight() + COMPONENT_PADDING;
