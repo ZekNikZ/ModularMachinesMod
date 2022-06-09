@@ -41,11 +41,11 @@ public class PinComponent extends NodeComponent {
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth, IControllerRenderContext ctx) {
         for (int i = 0; i < this.node.getInputPins().size(); i++) {
-            ctx.drawString(poseStack, "Input", 0, 10 * i);
+            ctx.drawString(poseStack, this.node.getInputPins().get(i).name(), 0, 10 * i);
         }
 
         for (int i = 0; i < this.node.getOutputPins().size(); i++) {
-            ctx.drawStringJustified(poseStack, "Output", this.width, 10 * i, Justification.RIGHT);
+            ctx.drawStringJustified(poseStack, this.node.getOutputPins().get(i).name(), this.width, 10 * i, Justification.RIGHT);
         }
     }
 }

@@ -160,7 +160,14 @@ public abstract class Node extends AbstractFocusableEventListener {
     }
 
     protected void renderBackground(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int totalWidth, int totalHeight) {
-        BACKGROUND_TEXTURE.render(poseStack, 0, 0, totalWidth, totalHeight);
+        final float SCALE_FACTOR = 1.5f;
+
+        poseStack.pushPose();
+        poseStack.scale(1 / SCALE_FACTOR, 1 / SCALE_FACTOR, 1);
+
+        BACKGROUND_TEXTURE.render(poseStack, 0, 0, (int) (totalWidth * SCALE_FACTOR), (int) (totalHeight * SCALE_FACTOR));
+
+        poseStack.popPose();
     }
 
     protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth, IControllerRenderContext ctx) {
