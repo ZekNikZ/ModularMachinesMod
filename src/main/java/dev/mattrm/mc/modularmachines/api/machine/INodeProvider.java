@@ -1,11 +1,12 @@
 package dev.mattrm.mc.modularmachines.api.machine;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface INodeProvider {
     @FunctionalInterface
     interface NodeConstructor<N extends Node> {
-        N apply(INodeManager manager, int id);
+        N apply(INodeManager manager, UUID id);
     }
 
     /**

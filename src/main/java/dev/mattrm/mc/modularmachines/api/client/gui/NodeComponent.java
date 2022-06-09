@@ -8,6 +8,10 @@ public abstract class NodeComponent extends AbstractFocusableEventListener {
 
     public abstract int getHeight();
 
+    public boolean isHidden() {
+        return false;
+    }
+
     public abstract void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth, IControllerRenderContext ctx);
 
     @Override

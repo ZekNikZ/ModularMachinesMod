@@ -49,7 +49,7 @@ public class ControlFlowInputPin extends InputPin<ControlFlowInputPin.ControlFlo
     }
 
     @Override
-    public int maxConnections() {
+    public int maxConnectionCount() {
         return -1;
     }
 

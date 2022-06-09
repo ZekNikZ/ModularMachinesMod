@@ -28,7 +28,7 @@ public class ControlFlowOutputPin extends OutputPin<ControlFlowInputPin.ControlF
     }
 
     @Override
-    public int maxConnections() {
+    public int maxConnectionCount() {
         return -1;
     }
 

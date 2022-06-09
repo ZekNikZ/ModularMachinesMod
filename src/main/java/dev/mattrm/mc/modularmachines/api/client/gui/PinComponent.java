@@ -45,7 +45,7 @@ public class PinComponent extends NodeComponent {
         }
 
         for (int i = 0; i < this.node.getOutputPins().size(); i++) {
-            ctx.drawStringJustified(poseStack, this.node.getOutputPins().get(i).name(), this.width, 10 * i, Justification.RIGHT);
+            ctx.drawStringJustified(poseStack, this.node.getOutputPins().get(i).name(), fullWidth, 10 * i, Justification.RIGHT);
         }
     }
 }

@@ -15,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 public abstract class Node extends AbstractFocusableEventListener {
     private INodeManager manager;
@@ -85,7 +87,7 @@ public abstract class Node extends AbstractFocusableEventListener {
     private static final int COMPONENT_PADDING = 5;
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/node.png");
     private static final StretchableTexture BACKGROUND_TEXTURE = new StretchableTexture(BACKGROUND_LOCATION, 0, 0, 48, 48, 16);
-    private final int id;
+    private final UUID id;
     private final ControlFlowInput controlFlowInputState;
     private final ControlFlowOutput controlFlowOutputState;
     private final List<InputPin<?>> inputPins = new ArrayList<>();
@@ -95,7 +97,7 @@ public abstract class Node extends AbstractFocusableEventListener {
     private int x = 0;
     private int y = 0;
 
-    public Node(INodeManager manager, int id, ControlFlowInput controlFlowInputState, ControlFlowOutput controlFlowOutputState) {
+    public Node(INodeManager manager, UUID id, ControlFlowInput controlFlowInputState, ControlFlowOutput controlFlowOutputState) {
         this.manager = manager;
         this.id = id;
         this.controlFlowInputState = controlFlowInputState;
@@ -144,8 +146,8 @@ public abstract class Node extends AbstractFocusableEventListener {
     }
 
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick, IControllerRenderContext ctx) {
-        final int componentMaxWidth = this.components.stream().mapToInt(NodeComponent::getWidth).max().orElse(0);
-        final int componentTotalHeight = this.components.stream().mapToInt(NodeComponent::getHeight).sum();
+        final int componentMaxWidth = this.components.stream().filter(Predicate.not(NodeComponent::isHidden)).mapToInt(NodeComponent::getWidth).max().orElse(0);
+        final int componentTotalHeight = this.components.stream().filter(Predicate.not(NodeComponent::isHidden)).mapToInt(NodeComponent::getHeight).sum();
         final int totalWidth = componentMaxWidth + 2 * NODE_PADDING;
         final int totalHeight = componentTotalHeight + (this.components.size() - 1) * COMPONENT_PADDING + 2 * NODE_PADDING;
 
@@ -173,6 +175,10 @@ public abstract class Node extends AbstractFocusableEventListener {
     protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, float partialTick, int fullWidth, IControllerRenderContext ctx) {
         int y = 0;
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             poseStack.pushPose();
             poseStack.translate(0, y, 0);
             comp.render(poseStack, mouseX, mouseY, partialTick, fullWidth, ctx);
@@ -182,7 +188,7 @@ public abstract class Node extends AbstractFocusableEventListener {
         }
     }
 
-    public final int getId() {
+    public final UUID getId() {
         return this.id;
     }
 
@@ -196,6 +202,10 @@ public abstract class Node extends AbstractFocusableEventListener {
         final int xOffset = NODE_PADDING;
         int yOffset = NODE_PADDING;
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             boolean res = comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset);
             if (res) {
                 return true;
@@ -212,6 +222,10 @@ public abstract class Node extends AbstractFocusableEventListener {
         final int xOffset = NODE_PADDING;
         int yOffset = NODE_PADDING;
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             if (comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
                 if (!comp.isHovered()) {
                     comp.setHovered(true);
@@ -236,6 +250,10 @@ public abstract class Node extends AbstractFocusableEventListener {
         final int xOffset = NODE_PADDING;
         int yOffset = NODE_PADDING;
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             if (!comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
                 continue;
             }
@@ -256,6 +274,10 @@ public abstract class Node extends AbstractFocusableEventListener {
         final int xOffset = NODE_PADDING;
         int yOffset = NODE_PADDING;
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             if (!comp.isMouseOver(relMouseX - xOffset, relMouseY - yOffset)) {
                 continue;
             }
@@ -274,6 +296,10 @@ public abstract class Node extends AbstractFocusableEventListener {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             if (!comp.isFocused() && !comp.bypassFocus()) {
                 continue;
             }
@@ -290,6 +316,10 @@ public abstract class Node extends AbstractFocusableEventListener {
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             if (!comp.isFocused() && !comp.bypassFocus()) {
                 continue;
             }
@@ -306,6 +336,10 @@ public abstract class Node extends AbstractFocusableEventListener {
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
         for (NodeComponent comp : this.components) {
+            if (comp.isHidden()) {
+                continue;
+            }
+
             if (!comp.isFocused() && !comp.bypassFocus()) {
                 continue;
             }
@@ -342,10 +376,11 @@ public abstract class Node extends AbstractFocusableEventListener {
     }
 
     /**
-     * Check whether this node can be activated before actually activating it.
+     * Check whether this node can be activated before actually activating it. Intended to be overwritten in subclasses.
      *
      * @return whether to go through with the activation
      */
+    @Deprecated
     public boolean activationAllowed() {
         return true;
     }

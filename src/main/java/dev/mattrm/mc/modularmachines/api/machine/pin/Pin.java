@@ -52,6 +52,6 @@ public abstract class Pin<T> {
      *
      * @return the maximum of connections
      */
-    public abstract int maxConnections();
+    public abstract int maxConnectionCount();
 }
 

@@ -6,20 +6,24 @@ import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
 import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.common.container.ControllerMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
-public class ControllerScreen extends Screen implements IControllerRenderContext {
+public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> implements IControllerRenderContext {
     private static final ResourceLocation BG_TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/blueprint.png");
     private static final ResourceLocation NODE_FONT_LOCATION = new ResourceLocation(Constants.MOD_ID, "smooth");
     private static final int TEXTURE_SIZE = 256;
@@ -29,14 +33,15 @@ public class ControllerScreen extends Screen implements IControllerRenderContext
     private double zoom = 1;
     private final List<Node> nodes;
 
-    public ControllerScreen() {
-        super(ModGuiTranslation.CONTROLLER_GUI.component());
+    public ControllerScreen(ControllerMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+        super(pMenu, pPlayerInventory, pTitle);
 
         // TODO: DEBUG
         this.nodes = List.of(
-            new Node(null, 0, Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.DISABLED) {
+            new Node(null, UUID.randomUUID(), Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.DISABLED) {
                 @Override
                 protected void initComponents() {
+                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
                     this.addComponent(new SimpleTextNodeComponent("Test 1"));
                     this.addComponent(new SimpleTextNodeComponent("Test 2"));
                 }
@@ -46,9 +51,10 @@ public class ControllerScreen extends Screen implements IControllerRenderContext
                     return true;
                 }
             },
-            new Node(null, 1, Node.ControlFlowInput.DISABLED, Node.ControlFlowOutput.ENABLED) {
+            new Node(null, UUID.randomUUID(), Node.ControlFlowInput.DISABLED, Node.ControlFlowOutput.ENABLED) {
                 @Override
                 protected void initComponents() {
+                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
                     this.addComponent(new SimpleTextNodeComponent("Test 3"));
                     this.addComponent(new SimpleTextNodeComponent("Test 4"));
                 }
@@ -58,9 +64,10 @@ public class ControllerScreen extends Screen implements IControllerRenderContext
                     return true;
                 }
             },
-            new Node(null, 2, Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.ENABLED) {
+            new Node(null, UUID.randomUUID(), Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.ENABLED) {
                 @Override
                 protected void initComponents() {
+                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
                     this.addComponent(new SimpleTextNodeComponent("Test 3"));
                     this.addComponent(new SimpleTextNodeComponent("Test 4"));
                 }
@@ -81,12 +88,11 @@ public class ControllerScreen extends Screen implements IControllerRenderContext
 
     @Override
     public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pPoseStack);
         this.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY);
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
         this.renderFg(pPoseStack, pPartialTick, pMouseX, pMouseY);
     }
 
+    @Override
     protected void renderBg(@NotNull PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
         final int TILE_SIZE = TEXTURE_SIZE;
         final int TILES_ACROSS = ((int) (this.screenWidth() / TILE_SIZE / this.zoom));
@@ -125,6 +131,15 @@ public class ControllerScreen extends Screen implements IControllerRenderContext
         this.font.draw(pPoseStack, text("Rel. Mouse X: " + relMouseX), 10, 40, 0);
         this.font.draw(pPoseStack, text("Rel. Mouse Y: " + relMouseY), 10, 50, 0);
         this.font.draw(pPoseStack, text("Partial Tick: " + pPartialTick), 10, 60, 0);
+    }
+
+    @Override
+    protected void renderTooltip(PoseStack pPoseStack, int pX, int pY) {
+//        super.renderTooltip(pPoseStack, pX, pY);
+    }
+
+    @Override
+    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
     }
 
     private Iterable<Node> getNodes() {
@@ -292,13 +307,13 @@ public class ControllerScreen extends Screen implements IControllerRenderContext
         // this.addRenderableWidget();
     }
 
-    public static void safeOpen() {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ControllerScreen::open);
-    }
-
-    public static void open() {
-        Minecraft.getInstance().setScreen(new ControllerScreen());
-    }
+//    public static void safeOpen() {
+//        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ControllerScreen::open);
+//    }
+//
+//    public static void open() {
+//        Minecraft.getInstance().setScreen(new ControllerScreen());
+//    }
 
     public Font font() {
         return this.font;

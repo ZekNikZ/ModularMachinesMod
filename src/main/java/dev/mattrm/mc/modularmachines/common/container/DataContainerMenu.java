@@ -39,7 +39,5 @@ public abstract class DataContainerMenu<T> extends AbstractContainerMenu {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-
-
     }
 }
