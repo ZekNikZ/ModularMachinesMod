@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 // https://www.toptal.com/developers/hastebin/hicefopuce.json
-public class MachineControllerBlockEntity extends BlockEntity {
+public class MachineControllerBlockEntity extends DataBlockEntity {
     private boolean connected = false;
     private BlockPos corner1 = BlockPos.ZERO;
     private BlockPos corner2 = BlockPos.ZERO;
@@ -33,6 +33,8 @@ public class MachineControllerBlockEntity extends BlockEntity {
 
     public MachineControllerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.MACHINE_CONTROLLER.get(), blockPos, blockState);
+
+        this.addSynchedData("data", ControllerSynchedData::new);
     }
 
     @Override
@@ -335,5 +337,9 @@ public class MachineControllerBlockEntity extends BlockEntity {
 
     public String getErrorMessage() {
         return this.errorMessage;
+    }
+
+    public ControllerSynchedData getControllerData() {
+        return (ControllerSynchedData) this.getSynchedData("data");
     }
 }

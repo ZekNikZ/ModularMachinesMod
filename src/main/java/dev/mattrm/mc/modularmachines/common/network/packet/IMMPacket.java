@@ -5,6 +5,9 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/**
+ * Must include IMMPacket(whatever you need) and IMMPacket(FriendlyByteBuf) constructors.
+ */
 public interface IMMPacket {
     void handle(NetworkEvent.Context context);
 

@@ -1,6 +1,7 @@
 package dev.mattrm.mc.modularmachines.common.network;
 
 import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.common.blockentity.ControllerSynchedData;
 import dev.mattrm.mc.modularmachines.common.network.packet.IMMPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +39,6 @@ public class PacketHandler {
     }
 
     public static void init() {
-
+        registerClientToServer(ControllerSynchedData.TestAction.class, ControllerSynchedData.TestAction::new);
     }
 }

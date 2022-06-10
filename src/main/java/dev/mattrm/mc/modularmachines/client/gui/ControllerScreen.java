@@ -6,8 +6,8 @@ import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
 import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.common.blockentity.ControllerSynchedData;
 import dev.mattrm.mc.modularmachines.common.container.ControllerMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -16,8 +16,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -131,6 +129,8 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
         this.font.draw(pPoseStack, text("Rel. Mouse X: " + relMouseX), 10, 40, 0);
         this.font.draw(pPoseStack, text("Rel. Mouse Y: " + relMouseY), 10, 50, 0);
         this.font.draw(pPoseStack, text("Partial Tick: " + pPartialTick), 10, 60, 0);
+        this.font.draw(pPoseStack, text("Data X: " + this.menu.data.getX()), 10, 70, 0);
+        this.font.draw(pPoseStack, text("Data Y: " + this.menu.data.getY()), 10, 80, 0);
     }
 
     @Override
@@ -213,6 +213,8 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        this.menu.applyAction(ControllerSynchedData.TestAction.create((int) pMouseX, (int) pMouseY));
+
         for (Node node : this.getNodes()) {
             int xOffset = node.getX() + (int) this.scrollX;
             int yOffset = node.getY() + (int) this.scrollY;
