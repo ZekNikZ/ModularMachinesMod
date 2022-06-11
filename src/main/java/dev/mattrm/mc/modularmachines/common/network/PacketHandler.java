@@ -26,6 +26,11 @@ public class PacketHandler {
 
     private static int index = 0;
 
+    protected static <P extends IMMPacket> void registerBidirectional(Class<P> type, Function<FriendlyByteBuf, P> decoder) {
+        registerServerToClient(type, decoder);
+        registerClientToServer(type, decoder);
+    }
+
     protected static <P extends IMMPacket> void registerClientToServer(Class<P> type, Function<FriendlyByteBuf, P> decoder) {
         registerMessage(type, decoder, NetworkDirection.PLAY_TO_SERVER);
     }
