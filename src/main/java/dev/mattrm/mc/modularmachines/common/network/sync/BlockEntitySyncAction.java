@@ -4,31 +4,37 @@ import dev.mattrm.mc.modularmachines.client.ClientHelpers;
 import dev.mattrm.mc.modularmachines.common.blockentity.DataBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 
 import java.util.function.Supplier;
 
-public abstract class BlockEntityClientboundSyncAction<T extends SynchedData> extends ClientboundSyncAction<T> {
+public abstract class BlockEntitySyncAction<T extends SynchedData> extends SyncAction<T> {
     private final BlockPos blockPos;
     private DataBlockEntity blockEntity;
     private final String key;
 
-    public BlockEntityClientboundSyncAction(DataBlockEntity blockEntity, String key) {
+    public BlockEntitySyncAction(DataBlockEntity blockEntity, String key) {
         this.blockEntity = blockEntity;
         this.blockPos = blockEntity.getBlockPos();
         this.key = key;
     }
 
-    public BlockEntityClientboundSyncAction(FriendlyByteBuf buffer) {
+    public BlockEntitySyncAction(FriendlyByteBuf buffer) {
         this.blockPos = buffer.readBlockPos();
         this.key = buffer.readUtf();
     }
 
     @Override
-    protected Supplier<Runnable> init() {
+    protected Supplier<Runnable> initClientbound() {
         return () -> () -> {
             this.blockEntity = (DataBlockEntity) ClientHelpers.getBlockEntityAtPos(this.blockPos);
         };
+    }
+
+    @Override
+    protected void initServerbound(ServerPlayer sender) {
+        this.blockEntity = (DataBlockEntity) sender.getLevel().getBlockEntity(this.blockPos);
     }
 
     @MustBeInvokedByOverriders

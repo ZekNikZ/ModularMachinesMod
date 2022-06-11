@@ -1,6 +1,6 @@
 package dev.mattrm.mc.modularmachines.common.blockentity;
 
-import dev.mattrm.mc.modularmachines.common.network.sync.BlockEntityServerboundSyncAction;
+import dev.mattrm.mc.modularmachines.common.network.sync.BlockEntitySyncAction;
 import dev.mattrm.mc.modularmachines.common.network.sync.SynchedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +33,7 @@ public class ControllerSynchedData extends SynchedData {
         this.y = tag.getInt("y");
     }
 
-    public static class TestAction extends BlockEntityServerboundSyncAction<ControllerSynchedData> {
+    public static class TestAction extends BlockEntitySyncAction<ControllerSynchedData> {
         int x;
         int y;
 
