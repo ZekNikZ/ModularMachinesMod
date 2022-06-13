@@ -11,17 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class DataBlockEntity extends BlockEntity {
-    protected final Map<String, SynchedData> synchedData = new HashMap<>();
+public class SynchedDataBlockEntity extends BlockEntity implements ISynchedDataManager<BlockEntity> {
+    private final Map<String, SynchedData> synchedData = new HashMap<>();
 
-    public DataBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public SynchedDataBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
-    }
-
-    protected final void addSynchedData(@NotNull String key, @NotNull Supplier<SynchedData> dataSupplier) {
-        this.synchedData.put(key, dataSupplier.get());
     }
 
     @MustBeInvokedByOverriders
@@ -51,7 +46,8 @@ public class DataBlockEntity extends BlockEntity {
         this.synchedData.forEach((key, data) -> data.deserializeNBT(tag.getCompound(key)));
     }
 
-    public SynchedData getSynchedData(String key) {
-        return this.synchedData.get(key);
+    @Override
+    public Map<String, SynchedData> getAllSynchedData() {
+        return this.synchedData;
     }
 }

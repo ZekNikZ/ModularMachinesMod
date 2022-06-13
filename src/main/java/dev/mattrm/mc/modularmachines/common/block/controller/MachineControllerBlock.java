@@ -45,6 +45,7 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
         this.disconnectionHelper(level, pos, ModBlocks.MACHINE_CONTROLLER.get());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         if (!level.isClientSide()) {
@@ -98,6 +99,7 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
 //        return InteractionResult.CONSUME;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onRemove(BlockState blockState, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
         if (!blockState.is(newState.getBlock())) {

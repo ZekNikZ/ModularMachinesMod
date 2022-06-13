@@ -1,7 +1,7 @@
 package dev.mattrm.mc.modularmachines.common.network.sync;
 
 import dev.mattrm.mc.modularmachines.client.ClientHelpers;
-import dev.mattrm.mc.modularmachines.common.blockentity.DataBlockEntity;
+import dev.mattrm.mc.modularmachines.common.blockentity.SynchedDataBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,10 +11,10 @@ import java.util.function.Supplier;
 
 public abstract class BlockEntitySyncAction<T extends SynchedData> extends SyncAction<T> {
     private final BlockPos blockPos;
-    private DataBlockEntity blockEntity;
+    private SynchedDataBlockEntity blockEntity;
     private final String key;
 
-    public BlockEntitySyncAction(DataBlockEntity blockEntity, String key) {
+    public BlockEntitySyncAction(SynchedDataBlockEntity blockEntity, String key) {
         this.blockEntity = blockEntity;
         this.blockPos = blockEntity.getBlockPos();
         this.key = key;
@@ -28,13 +28,13 @@ public abstract class BlockEntitySyncAction<T extends SynchedData> extends SyncA
     @Override
     protected Supplier<Runnable> initClientbound() {
         return () -> () -> {
-            this.blockEntity = (DataBlockEntity) ClientHelpers.getBlockEntityAtPos(this.blockPos);
+            this.blockEntity = (SynchedDataBlockEntity) ClientHelpers.getBlockEntityAtPos(this.blockPos);
         };
     }
 
     @Override
     protected void initServerbound(ServerPlayer sender) {
-        this.blockEntity = (DataBlockEntity) sender.getLevel().getBlockEntity(this.blockPos);
+        this.blockEntity = (SynchedDataBlockEntity) sender.getLevel().getBlockEntity(this.blockPos);
     }
 
     @MustBeInvokedByOverriders
@@ -44,9 +44,15 @@ public abstract class BlockEntitySyncAction<T extends SynchedData> extends SyncA
         buffer.writeUtf(this.key);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T getData() {
-        return (T) this.blockEntity.getSynchedData(this.key);
+        SynchedData synchedData = this.blockEntity.getSynchedData(this.key);
+        if (synchedData == null) {
+            throw new IllegalStateException("Key is invalid for the provided BlockEntity");
+        }
+
+        return (T) synchedData;
     }
 
     @MustBeInvokedByOverriders

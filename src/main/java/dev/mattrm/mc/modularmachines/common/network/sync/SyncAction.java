@@ -1,5 +1,6 @@
 package dev.mattrm.mc.modularmachines.common.network.sync;
 
+import com.google.common.util.concurrent.Runnables;
 import dev.mattrm.mc.modularmachines.common.network.PacketHandler;
 import dev.mattrm.mc.modularmachines.common.network.packet.IMMPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,10 +11,23 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class SyncAction<T extends SynchedData> implements IMMPacket {
-    public abstract T getData();
+    private final List<Class<? extends T>> applicableClasses;
+
+    @SafeVarargs
+    protected SyncAction(Class<? extends T>... applicableClasses) {
+        this.applicableClasses = Arrays.stream(applicableClasses).toList();
+    }
+
+    public <S extends SynchedData> boolean isApplicableTo(S dataClass) {
+        return this.applicableClasses.stream().anyMatch(applicableClass -> applicableClass.isInstance(dataClass));
+    }
+
+    protected abstract T getData();
 
     public abstract void apply(T synchedData);
 
@@ -49,7 +63,7 @@ public abstract class SyncAction<T extends SynchedData> implements IMMPacket {
             context.enqueueWork(() -> {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, this.initClientbound());
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    ClientSynchedDataHelper.applyPropagatedAction(this.getData(), this);
+                    SynchedData.applyPropagatedAction(this.getData(), this);
                 });
             });
         }

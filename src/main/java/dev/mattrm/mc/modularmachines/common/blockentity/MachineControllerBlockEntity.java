@@ -17,14 +17,13 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 // https://www.toptal.com/developers/hastebin/hicefopuce.json
-public class MachineControllerBlockEntity extends DataBlockEntity {
+public class MachineControllerBlockEntity extends SynchedDataBlockEntity {
     private boolean connected = false;
     private BlockPos corner1 = BlockPos.ZERO;
     private BlockPos corner2 = BlockPos.ZERO;

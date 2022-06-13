@@ -37,7 +37,7 @@ public class ControllerSynchedData extends SynchedData {
         int x;
         int y;
 
-        public TestAction(DataBlockEntity blockEntity, int x, int y) {
+        public TestAction(SynchedDataBlockEntity blockEntity, int x, int y) {
             super(blockEntity, "data");
             this.x = x;
             this.y = y;
@@ -63,7 +63,7 @@ public class ControllerSynchedData extends SynchedData {
             super.apply(synchedData);
         }
 
-        public static Function<DataBlockEntity, TestAction> create(int x, int y) {
+        public static Function<SynchedDataBlockEntity, TestAction> create(int x, int y) {
             return (dbe) -> new TestAction(dbe, x, y);
         }
     }
