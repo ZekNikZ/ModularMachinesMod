@@ -9,6 +9,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -18,9 +19,8 @@ import java.util.function.Supplier;
 public abstract class SyncAction<T extends SynchedData> implements IMMPacket {
     private final List<Class<? extends T>> applicableClasses;
 
-    @SafeVarargs
-    protected SyncAction(Class<? extends T>... applicableClasses) {
-        this.applicableClasses = Arrays.stream(applicableClasses).toList();
+    protected SyncAction(Iterable<Class<? extends T>> applicableClasses) {
+        this.applicableClasses = Lists.newArrayList(applicableClasses.iterator());
     }
 
     public <S extends SynchedData> boolean isApplicableTo(S dataClass) {
@@ -29,7 +29,7 @@ public abstract class SyncAction<T extends SynchedData> implements IMMPacket {
 
     protected abstract T getData();
 
-    public abstract void apply(T synchedData);
+    public abstract void apply(SynchedData synchedData);
 
     protected @Nullable PacketDistributor.PacketTarget getClientPacketDistributor() {
         return PacketDistributor.ALL.noArg();

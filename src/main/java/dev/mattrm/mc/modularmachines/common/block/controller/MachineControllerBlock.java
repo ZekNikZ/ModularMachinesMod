@@ -1,5 +1,6 @@
 package dev.mattrm.mc.modularmachines.common.block.controller;
 
+import dev.mattrm.mc.modularmachines.client.gui.ControllerScreen;
 import dev.mattrm.mc.modularmachines.client.gui.ModGuiTranslation;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineControllerBlock;
@@ -48,28 +49,28 @@ public class MachineControllerBlock extends BaseMachineControllerBlock implement
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
-        if (!level.isClientSide()) {
-            BlockEntity be = level.getBlockEntity(blockPos);
-            if (be instanceof MachineControllerBlockEntity) {
-                MenuProvider containerProvider = new MenuProvider() {
-                    @Override
-                    public Component getDisplayName() {
-                        return ModGuiTranslation.CONTROLLER_GUI.component();
-                    }
-
-                    @Override
-                    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
-                        return new ControllerMenu(windowId, blockPos, playerInventory, playerEntity);
-                    }
-                };
-                NetworkHooks.openGui((ServerPlayer) player, containerProvider, be.getBlockPos());
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
-        }
-//        if (level.isClientSide()) {
-//            ControllerScreen.safeOpen();
+//        if (!level.isClientSide()) {
+//            BlockEntity be = level.getBlockEntity(blockPos);
+//            if (be instanceof MachineControllerBlockEntity) {
+//                MenuProvider containerProvider = new MenuProvider() {
+//                    @Override
+//                    public Component getDisplayName() {
+//                        return ModGuiTranslation.CONTROLLER_GUI.component();
+//                    }
+//
+//                    @Override
+//                    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
+//                        return new ControllerMenu(windowId, blockPos, playerInventory, playerEntity);
+//                    }
+//                };
+//                NetworkHooks.openGui((ServerPlayer) player, containerProvider, be.getBlockPos());
+//            } else {
+//                throw new IllegalStateException("Our named container provider is missing!");
+//            }
 //        }
+        if (level.isClientSide()) {
+            ControllerScreen.safeOpen((MachineControllerBlockEntity) level.getBlockEntity(blockPos));
+        }
         return InteractionResult.SUCCESS;
 
 //        if (level.isClientSide()) return InteractionResult.SUCCESS;

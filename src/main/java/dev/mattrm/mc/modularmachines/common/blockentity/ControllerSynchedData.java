@@ -4,7 +4,9 @@ import dev.mattrm.mc.modularmachines.common.network.sync.BlockEntitySyncAction;
 import dev.mattrm.mc.modularmachines.common.network.sync.SynchedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class ControllerSynchedData extends SynchedData {
@@ -38,13 +40,13 @@ public class ControllerSynchedData extends SynchedData {
         int y;
 
         public TestAction(SynchedDataBlockEntity blockEntity, int x, int y) {
-            super(blockEntity, "data");
+            super(List.of(ControllerSynchedData.class), blockEntity, "data");
             this.x = x;
             this.y = y;
         }
 
         public TestAction(FriendlyByteBuf buffer) {
-            super(buffer);
+            super(List.of(ControllerSynchedData.class), buffer);
             this.x = buffer.readInt();
             this.y = buffer.readInt();
         }
@@ -57,13 +59,14 @@ public class ControllerSynchedData extends SynchedData {
         }
 
         @Override
-        public void apply(ControllerSynchedData synchedData) {
+        public void apply(SynchedData _synchedData) {
+            ControllerSynchedData synchedData = ((ControllerSynchedData) _synchedData);
             synchedData.x = this.x;
             synchedData.y = this.y;
             super.apply(synchedData);
         }
 
-        public static Function<SynchedDataBlockEntity, TestAction> create(int x, int y) {
+        public static Function<MachineControllerBlockEntity, TestAction> create(int x, int y) {
             return (dbe) -> new TestAction(dbe, x, y);
         }
     }

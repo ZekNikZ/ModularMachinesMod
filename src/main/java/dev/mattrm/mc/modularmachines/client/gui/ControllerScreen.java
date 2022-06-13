@@ -6,22 +6,27 @@ import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
 import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.client.gui.graph.Connection;
+import dev.mattrm.mc.modularmachines.common.block.controller.MachineControllerBlock;
 import dev.mattrm.mc.modularmachines.common.blockentity.ControllerSynchedData;
-import dev.mattrm.mc.modularmachines.common.container.ControllerMenu;
+import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> implements IControllerRenderContext {
+public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEntity> implements IControllerRenderContext {
     private static final ResourceLocation BG_TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/blueprint.png");
     private static final ResourceLocation NODE_FONT_LOCATION = new ResourceLocation(Constants.MOD_ID, "smooth");
     private static final int TEXTURE_SIZE = 256;
@@ -30,9 +35,10 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
     private double scrollY = 0;
     private double zoom = 1;
     private final List<Node> nodes;
+    private final List<Connection> connections;
 
-    public ControllerScreen(ControllerMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
-        super(pMenu, pPlayerInventory, pTitle);
+    public ControllerScreen(MachineControllerBlockEntity blockEntity) {
+        super(blockEntity, TextComponent.EMPTY);
 
         // TODO: DEBUG
         this.nodes = List.of(
@@ -82,6 +88,14 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
         this.nodes.get(1).setY(100);
         this.nodes.get(2).setX(100);
         this.nodes.get(2).setY(200);
+
+        this.connections = new ArrayList<>();
+        this.connections.add(new Connection(
+            this.nodes.get(1).getId(),
+            this.nodes.get(1).getOutputPins().get(0).name(),
+            this.nodes.get(2).getId(),
+            this.nodes.get(2).getInputPins().get(0).name()
+        ));
     }
 
     @Override
@@ -90,7 +104,6 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
         this.renderFg(pPoseStack, pPartialTick, pMouseX, pMouseY);
     }
 
-    @Override
     protected void renderBg(@NotNull PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
         final int TILE_SIZE = TEXTURE_SIZE;
         final int TILES_ACROSS = ((int) (this.screenWidth() / TILE_SIZE / this.zoom));
@@ -115,6 +128,10 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
         final int relMouseX = (int) (pMouseX / this.zoom - this.scrollX);
         final int relMouseY = (int) (pMouseY / this.zoom - this.scrollY);
 
+        // Connections
+        this.renderConnections(pPoseStack);
+
+        // Nodes
         this.getNodes().forEach(node -> {
             pPoseStack.pushPose();
             pPoseStack.scale((float) this.zoom, (float) this.zoom, (float) this.zoom);
@@ -129,17 +146,12 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
         this.font.draw(pPoseStack, text("Rel. Mouse X: " + relMouseX), 10, 40, 0);
         this.font.draw(pPoseStack, text("Rel. Mouse Y: " + relMouseY), 10, 50, 0);
         this.font.draw(pPoseStack, text("Partial Tick: " + pPartialTick), 10, 60, 0);
-        this.font.draw(pPoseStack, text("Data X: " + this.menu.data.getX()), 10, 70, 0);
-        this.font.draw(pPoseStack, text("Data Y: " + this.menu.data.getY()), 10, 80, 0);
+        this.font.draw(pPoseStack, text("Data X: " + ((ControllerSynchedData) this.getSynchedData("data")).getX()), 10, 70, 0);
+        this.font.draw(pPoseStack, text("Data Y: " + ((ControllerSynchedData) this.getSynchedData("data")).getY()), 10, 80, 0);
     }
 
-    @Override
-    protected void renderTooltip(PoseStack pPoseStack, int pX, int pY) {
-//        super.renderTooltip(pPoseStack, pX, pY);
-    }
-
-    @Override
-    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+    protected void renderConnections(PoseStack poseStack) {
+        RenderUtils.drawLine(poseStack, 100, 100, 400, 400, Color.RED);
     }
 
     private Iterable<Node> getNodes() {
@@ -213,7 +225,7 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        this.menu.applyAction(ControllerSynchedData.TestAction.create((int) pMouseX, (int) pMouseY));
+        this.applyAction("data", ControllerSynchedData.TestAction.create((int) pMouseX, (int) pMouseY));
 
         for (Node node : this.getNodes()) {
             int xOffset = node.getX() + (int) this.scrollX;
@@ -309,13 +321,13 @@ public class ControllerScreen extends AbstractContainerScreen<ControllerMenu> im
         // this.addRenderableWidget();
     }
 
-//    public static void safeOpen() {
-//        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ControllerScreen::open);
-//    }
-//
-//    public static void open() {
-//        Minecraft.getInstance().setScreen(new ControllerScreen());
-//    }
+    public static void safeOpen(MachineControllerBlockEntity blockEntity) {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> open(blockEntity));
+    }
+
+    private static void open(MachineControllerBlockEntity blockEntity) {
+        Minecraft.getInstance().setScreen(new ControllerScreen(blockEntity));
+    }
 
     public Font font() {
         return this.font;

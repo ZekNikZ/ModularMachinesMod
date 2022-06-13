@@ -12,7 +12,7 @@ public abstract class SynchedData {
 
     public abstract void deserializeNBT(CompoundTag tag);
 
-    public static <T extends SynchedData> void applyAction(T data, SyncAction<T> action) {
+    public static void applyAction(SynchedData data, SyncAction<? extends SynchedData> action) {
         if (!action.isApplicableTo(data)) {
             throw new IllegalArgumentException("Action is not applicable to the data type");
         }

@@ -1,5 +1,6 @@
 package dev.mattrm.mc.modularmachines.api.machine;
 
+import com.electronwill.nightconfig.core.io.ParsingMode;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.api.client.gui.AbstractFocusableEventListener;
@@ -13,13 +14,11 @@ import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public abstract class Node extends AbstractFocusableEventListener {
-    private INodeManager manager;
+    private final INodeManager manager;
 
     public enum ControlFlowInput {
         /**
@@ -91,7 +90,9 @@ public abstract class Node extends AbstractFocusableEventListener {
     private final ControlFlowInput controlFlowInputState;
     private final ControlFlowOutput controlFlowOutputState;
     private final List<InputPin<?>> inputPins = new ArrayList<>();
+    private final Map<String, InputPin<?>> inputPinMap = new HashMap<>();
     private final List<OutputPin<?, ?>> outputPins = new ArrayList<>();
+    private final Map<String, OutputPin<?, ?>> outputPinMap = new HashMap<>();
     private final List<NodeComponent> components = new ArrayList<>();
 
     private int x = 0;
@@ -119,10 +120,12 @@ public abstract class Node extends AbstractFocusableEventListener {
 
     protected void addInputPin(InputPin<?> pin) {
         this.inputPins.add(pin);
+        this.inputPinMap.put(pin.name(), pin);
     }
 
     protected void addOutputPin(OutputPin<?, ?> pin) {
         this.outputPins.add(pin);
+        this.outputPinMap.put(pin.name(), pin);
     }
 
     public final ControlFlowInput getControlFlowInputState() {
@@ -139,6 +142,14 @@ public abstract class Node extends AbstractFocusableEventListener {
 
     public final List<OutputPin<?, ?>> getOutputPins() {
         return this.outputPins;
+    }
+
+    public final InputPin<?> getInputPins(String name) {
+        return this.inputPinMap.get(name);
+    }
+
+    public final OutputPin<?, ?> getOutputPins(String name) {
+        return this.outputPinMap.get(name);
     }
 
     protected final void addComponent(NodeComponent component) {

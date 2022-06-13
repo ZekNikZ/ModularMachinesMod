@@ -14,13 +14,15 @@ public abstract class BlockEntitySyncAction<T extends SynchedData> extends SyncA
     private SynchedDataBlockEntity blockEntity;
     private final String key;
 
-    public BlockEntitySyncAction(SynchedDataBlockEntity blockEntity, String key) {
+    public BlockEntitySyncAction(Iterable<Class<? extends T>> applicableClasses, SynchedDataBlockEntity blockEntity, String key) {
+        super(applicableClasses);
         this.blockEntity = blockEntity;
         this.blockPos = blockEntity.getBlockPos();
         this.key = key;
     }
 
-    public BlockEntitySyncAction(FriendlyByteBuf buffer) {
+    public BlockEntitySyncAction(Iterable<Class<? extends T>> applicableClasses, FriendlyByteBuf buffer) {
+        super(applicableClasses);
         this.blockPos = buffer.readBlockPos();
         this.key = buffer.readUtf();
     }
@@ -57,7 +59,7 @@ public abstract class BlockEntitySyncAction<T extends SynchedData> extends SyncA
 
     @MustBeInvokedByOverriders
     @Override
-    public void apply(T synchedData) {
+    public void apply(SynchedData synchedData) {
         this.blockEntity.setChanged();
     }
 }

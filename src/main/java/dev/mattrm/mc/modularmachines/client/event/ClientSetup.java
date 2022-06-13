@@ -13,7 +13,7 @@ public class ClientSetup {
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            MenuScreens.register(ModContainers.CONTROLLER.get(), ControllerScreen::new);
+//            MenuScreens.register(ModContainers.CONTROLLER.get(), ControllerScreen::new);
         });
     }
 }
