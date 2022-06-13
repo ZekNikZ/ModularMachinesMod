@@ -12,9 +12,9 @@ public class ModContainers {
 
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
 
-    public static final RegistryObject<MenuType<ControllerMenu>> CONTROLLER = CONTAINERS.register("controller", () -> IForgeMenuType.create(
-        (windowId, inv, data) -> new ControllerMenu(windowId, data.readBlockPos(), inv, inv.player)
-    ));
+//    public static final RegistryObject<MenuType<ControllerMenu>> CONTROLLER = CONTAINERS.register("controller", () -> IForgeMenuType.create(
+//        (windowId, inv, data) -> new ControllerMenu(windowId, data.readBlockPos(), inv, inv.player)
+//    ));
 
     public static void register(IEventBus eventBus) {
         CONTAINERS.register(eventBus);

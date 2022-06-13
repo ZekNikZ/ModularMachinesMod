@@ -5,6 +5,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineController;
 import dev.mattrm.mc.modularmachines.api.block.IMachineCore;
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
+import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 // https://www.toptal.com/developers/hastebin/hicefopuce.json
-public class MachineControllerBlockEntity extends SynchedDataBlockEntity {
+public class MachineControllerBlockEntity extends SynchedDataBlockEntity implements INodeProvider {
     private boolean connected = false;
     private BlockPos corner1 = BlockPos.ZERO;
     private BlockPos corner2 = BlockPos.ZERO;
@@ -340,5 +341,10 @@ public class MachineControllerBlockEntity extends SynchedDataBlockEntity {
 
     public ControllerSynchedData getControllerData() {
         return (ControllerSynchedData) this.getSynchedData("data");
+    }
+
+    @Override
+    public @NotNull Map<String, NodeConstructor<?>> getNodeBuilders() {
+        return Map.of();
     }
 }

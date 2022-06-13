@@ -1,5 +1,7 @@
 package dev.mattrm.mc.modularmachines.api.machine;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,5 +21,6 @@ public interface INodeProvider {
      *
      * @return a map of Node constructors
      */
+    @NotNull
     Map<String, NodeConstructor<?>> getNodeBuilders();
 }

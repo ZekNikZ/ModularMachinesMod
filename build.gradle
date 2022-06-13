@@ -177,6 +177,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:thermal-expansion-69163:3803489")
     runtimeOnly fg.deobf("curse.maven:thermal-foundation-222880:3803495")
     runtimeOnly fg.deobf("curse.maven:cofh-core-69162:3803484")
+    runtimeOnly fg.deobf("curse.maven:configured-457570:3721946")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
