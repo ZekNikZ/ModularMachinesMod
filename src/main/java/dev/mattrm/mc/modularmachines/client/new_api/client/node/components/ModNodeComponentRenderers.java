@@ -1,4 +1,9 @@
-package dev.mattrm.mc.modularmachines.client.new_api;
+package dev.mattrm.mc.modularmachines.client.new_api.client.node.components;
+
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponentType;
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.components.impl.SimpleTextNodeComponentRenderer;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.ModNodeComponents;
 
 import java.util.Map;
 

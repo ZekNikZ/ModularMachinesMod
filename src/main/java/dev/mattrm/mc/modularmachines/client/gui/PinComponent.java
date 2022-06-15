@@ -5,7 +5,7 @@ import dev.mattrm.mc.modularmachines.api.machine.Node;
 import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
 import dev.mattrm.mc.modularmachines.client.gui.util.Justification;
-import dev.mattrm.mc.modularmachines.client.new_api.NodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponent;
 import net.minecraft.client.Minecraft;
 
 import java.util.List;

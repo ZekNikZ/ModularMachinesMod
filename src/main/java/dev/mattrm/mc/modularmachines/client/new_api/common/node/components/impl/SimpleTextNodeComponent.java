@@ -1,5 +1,6 @@
-package dev.mattrm.mc.modularmachines.client.new_api;
+package dev.mattrm.mc.modularmachines.client.new_api.common.node.components.impl;
 
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponent;
 import net.minecraft.nbt.CompoundTag;
 
 public class SimpleTextNodeComponent extends NodeComponent {

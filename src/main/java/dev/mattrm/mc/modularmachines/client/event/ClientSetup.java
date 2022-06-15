@@ -1,7 +1,6 @@
 package dev.mattrm.mc.modularmachines.client.event;
 
-import dev.mattrm.mc.modularmachines.client.new_api.ModNodeComponentRenderers;
-import net.minecraft.client.gui.screens.MenuScreens;
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.components.ModNodeComponentRenderers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;

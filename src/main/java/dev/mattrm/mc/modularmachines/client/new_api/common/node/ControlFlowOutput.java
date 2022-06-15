@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.client.new_api;
+package dev.mattrm.mc.modularmachines.client.new_api.common.node;
 
 public enum ControlFlowOutput {
     /**

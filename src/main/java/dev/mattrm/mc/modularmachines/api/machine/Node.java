@@ -4,10 +4,10 @@ import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowInputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowOutputPin;
-import dev.mattrm.mc.modularmachines.client.new_api.NodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponent;
 import dev.mattrm.mc.modularmachines.client.gui.PinComponent;
-import dev.mattrm.mc.modularmachines.client.new_api.ControlFlowInput;
-import dev.mattrm.mc.modularmachines.client.new_api.ControlFlowOutput;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;
 
 import java.util.*;
 

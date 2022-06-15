@@ -1,10 +1,13 @@
-package dev.mattrm.mc.modularmachines.client.new_api;
+package dev.mattrm.mc.modularmachines.client.new_api.client.node;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.client.gui.AbstractFocusableEventListener;
 import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.components.NodeComponentRenderer;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
