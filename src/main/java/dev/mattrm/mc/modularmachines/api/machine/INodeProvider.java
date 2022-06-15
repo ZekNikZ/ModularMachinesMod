@@ -23,4 +23,15 @@ public interface INodeProvider {
      */
     @NotNull
     Map<String, NodeConstructor<?>> getNodeBuilders();
+
+    /**
+     * Returns true whether this node provider provides a "library" of nodes, meaning
+     * that the user can dynamically add copies of these nodes instead of just having a
+     * single static copy.
+     *
+     * @return true if node repetition is allowed, false otherwise
+     */
+    default boolean providesLibrary() {
+        return false;
+    }
 }

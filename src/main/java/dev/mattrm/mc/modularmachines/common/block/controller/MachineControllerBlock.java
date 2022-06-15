@@ -1,5 +1,6 @@
 package dev.mattrm.mc.modularmachines.common.block.controller;
 
+import dev.mattrm.mc.modularmachines.api.machine.Node;
 import dev.mattrm.mc.modularmachines.client.gui.ControllerScreen;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.block.base.BaseMachineControllerBlock;

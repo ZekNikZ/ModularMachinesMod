@@ -1,11 +1,11 @@
-package dev.mattrm.mc.modularmachines.api.client.gui;
+package dev.mattrm.mc.modularmachines.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
 import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
-import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
 import dev.mattrm.mc.modularmachines.client.gui.util.Justification;
+import dev.mattrm.mc.modularmachines.client.new_api.NodeComponent;
 import net.minecraft.client.Minecraft;
 
 import java.util.List;

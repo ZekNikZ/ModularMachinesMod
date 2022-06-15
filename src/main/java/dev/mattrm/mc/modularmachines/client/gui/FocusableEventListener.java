@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.api.client.gui;
+package dev.mattrm.mc.modularmachines.client.gui;
 
 public interface FocusableEventListener {
     boolean isFocused();

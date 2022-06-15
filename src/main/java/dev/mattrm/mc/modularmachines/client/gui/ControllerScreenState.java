@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.api.client.gui;
+package dev.mattrm.mc.modularmachines.client.gui;
 
 public class ControllerScreenState {
     private static int nextId = 0;

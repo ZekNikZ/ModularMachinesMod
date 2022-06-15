@@ -3,11 +3,12 @@ package dev.mattrm.mc.modularmachines.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.api.client.gui.ControllerScreenState;
-import dev.mattrm.mc.modularmachines.api.client.gui.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.api.machine.Node;
 import dev.mattrm.mc.modularmachines.client.gui.graph.Connection;
-import dev.mattrm.mc.modularmachines.common.block.controller.MachineControllerBlock;
+import dev.mattrm.mc.modularmachines.client.new_api.ControlFlowInput;
+import dev.mattrm.mc.modularmachines.client.new_api.ControlFlowOutput;
+import dev.mattrm.mc.modularmachines.client.new_api.RenderableNode;
+import dev.mattrm.mc.modularmachines.client.new_api.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.common.blockentity.ControllerSynchedData;
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -34,7 +35,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
     private double scrollX = 0;
     private double scrollY = 0;
     private double zoom = 1;
-    private final List<Node> nodes;
+    private final List<RenderableNode> nodes;
     private final List<Connection> connections;
 
     public ControllerScreen(MachineControllerBlockEntity blockEntity) {
@@ -42,7 +43,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
 
         // TODO: DEBUG
         this.nodes = List.of(
-            new Node(null, UUID.randomUUID(), Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.DISABLED) {
+            new Node(null, UUID.randomUUID(), ControlFlowInput.ENABLED_AUTOMATIC, ControlFlowOutput.DISABLED) {
                 @Override
                 protected void initComponents() {
                     this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
@@ -55,7 +56,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
                     return true;
                 }
             },
-            new Node(null, UUID.randomUUID(), Node.ControlFlowInput.DISABLED, Node.ControlFlowOutput.ENABLED) {
+            new Node(null, UUID.randomUUID(), ControlFlowInput.DISABLED, ControlFlowOutput.ENABLED) {
                 @Override
                 protected void initComponents() {
                     this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
@@ -68,7 +69,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
                     return true;
                 }
             },
-            new Node(null, UUID.randomUUID(), Node.ControlFlowInput.ENABLED_AUTOMATIC, Node.ControlFlowOutput.ENABLED) {
+            new Node(null, UUID.randomUUID(), ControlFlowInput.ENABLED_AUTOMATIC, ControlFlowOutput.ENABLED) {
                 @Override
                 protected void initComponents() {
                     this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
@@ -154,7 +155,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
         RenderUtils.drawLine(poseStack, 100, 100, 400, 400, Color.RED);
     }
 
-    private Iterable<Node> getNodes() {
+    private Iterable<RenderableNode> getNodes() {
         // TODO: fix
         return this.nodes;
     }
@@ -227,7 +228,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         this.applyAction("data", ControllerSynchedData.TestAction.create((int) pMouseX, (int) pMouseY));
 
-        for (Node node : this.getNodes()) {
+        for (RenderableNode node : this.getNodes()) {
             int xOffset = node.getX() + (int) this.scrollX;
             int yOffset = node.getY() + (int) this.scrollY;
             double relMouseX = pMouseX - xOffset;
@@ -248,7 +249,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
 
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        for (Node node : this.getNodes()) {
+        for (RenderableNode node : this.getNodes()) {
             int xOffset = node.getX() + (int) this.scrollX;
             int yOffset = node.getY() + (int) this.scrollY;
             double relMouseX = pMouseX - xOffset;
@@ -269,7 +270,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        for (Node node : this.getNodes()) {
+        for (RenderableNode node : this.getNodes()) {
             if (!node.isFocused() && !node.bypassFocus()) {
                 continue;
             }
@@ -286,7 +287,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
 
     @Override
     public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-        for (Node node : this.getNodes()) {
+        for (RenderableNode node : this.getNodes()) {
             if (!node.isFocused() && !node.bypassFocus()) {
                 continue;
             }
@@ -302,7 +303,7 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
 
     @Override
     public boolean charTyped(char pCodePoint, int pModifiers) {
-        for (Node node : this.getNodes()) {
+        for (RenderableNode node : this.getNodes()) {
             if (!node.isFocused() && !node.bypassFocus()) {
                 continue;
             }
