@@ -1,7 +1,7 @@
 package dev.mattrm.mc.modularmachines;
 
 import com.mojang.logging.LogUtils;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.ModNodeComponents;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.ModNodeComponents;
 import dev.mattrm.mc.modularmachines.common.block.ModBlocks;
 import dev.mattrm.mc.modularmachines.common.blockentity.ModBlockEntities;
 import dev.mattrm.mc.modularmachines.common.container.ModContainers;

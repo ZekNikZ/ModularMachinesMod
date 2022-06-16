@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.client.new_api.common.node.components;
+package dev.mattrm.mc.modularmachines.client.new_api.common.node.component;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.registries.ForgeRegistryEntry;

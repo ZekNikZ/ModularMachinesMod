@@ -1,7 +1,7 @@
-package dev.mattrm.mc.modularmachines.client.new_api.common.node.components;
+package dev.mattrm.mc.modularmachines.client.new_api.common.node.component;
 
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.impl.SimpleTextNodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.SimpleTextNodeComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

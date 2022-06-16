@@ -1,10 +1,10 @@
-package dev.mattrm.mc.modularmachines.client.new_api.client.node.components.impl;
+package dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.impl;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
-import dev.mattrm.mc.modularmachines.client.new_api.client.node.components.NodeComponentRenderer;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.ModNodeComponents;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.impl.SimpleTextNodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.NodeComponentRenderer;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.ModNodeComponents;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.SimpleTextNodeComponent;
 import net.minecraft.client.Minecraft;
 
 public class SimpleTextNodeComponentRenderer extends NodeComponentRenderer<SimpleTextNodeComponent> {

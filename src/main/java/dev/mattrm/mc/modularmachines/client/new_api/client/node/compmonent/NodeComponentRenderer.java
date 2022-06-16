@@ -1,10 +1,10 @@
-package dev.mattrm.mc.modularmachines.client.new_api.client.node.components;
+package dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.client.gui.AbstractFocusableEventListener;
 import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponent;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.NodeComponentType;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponentType;
 
 public abstract class NodeComponentRenderer<T extends NodeComponent> extends AbstractFocusableEventListener {
     private final NodeComponentType<T> type;

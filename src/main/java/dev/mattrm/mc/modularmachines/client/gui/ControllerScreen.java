@@ -8,7 +8,7 @@ import dev.mattrm.mc.modularmachines.client.gui.graph.Connection;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;
 import dev.mattrm.mc.modularmachines.client.new_api.client.node.RenderableNode;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.components.impl.SimpleTextNodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.SimpleTextNodeComponent;
 import dev.mattrm.mc.modularmachines.common.blockentity.ControllerSynchedData;
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
 import net.minecraft.client.Minecraft;
