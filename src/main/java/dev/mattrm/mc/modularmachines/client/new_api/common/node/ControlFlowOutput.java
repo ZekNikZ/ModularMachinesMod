@@ -2,20 +2,20 @@ package dev.mattrm.mc.modularmachines.client.new_api.common.node;
 
 public enum ControlFlowOutput {
     /**
-     * No input pin and no automatic control flow.
-     * Example: external machine nodes
+     * No output pin.
+     * Example: mode nodes
      */
-    DISABLED(false, false),
+    DISABLED(false),
     /**
-     * Input pin and no automatic control flow.
-     * Example: conditional nodes
+     * Output pin.
+     * Example: output nodes
      */
-    ENABLED(true, false);
+    ENABLED(true);
 
     private final boolean outputPin;
 
-    ControlFlowOutput(boolean inputPin, boolean automatic) {
-        this.outputPin = inputPin;
+    ControlFlowOutput(boolean outputPin) {
+        this.outputPin = outputPin;
     }
 
     public boolean hasOutputPin() {

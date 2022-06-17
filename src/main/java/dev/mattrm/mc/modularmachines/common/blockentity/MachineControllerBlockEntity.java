@@ -7,7 +7,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.api.machine.INodeManager;
 import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
-import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
 import dev.mattrm.mc.modularmachines.common.util.MachinePartPosition;

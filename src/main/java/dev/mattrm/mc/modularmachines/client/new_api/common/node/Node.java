@@ -1,13 +1,12 @@
-package dev.mattrm.mc.modularmachines.api.machine;
+package dev.mattrm.mc.modularmachines.client.new_api.common.node;
 
+import dev.mattrm.mc.modularmachines.api.machine.INodeManager;
 import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowInputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowOutputPin;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
 import dev.mattrm.mc.modularmachines.client.gui.PinComponent;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
 
 import java.util.*;
 

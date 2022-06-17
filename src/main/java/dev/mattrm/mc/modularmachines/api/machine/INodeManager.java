@@ -1,5 +1,7 @@
 package dev.mattrm.mc.modularmachines.api.machine;
 
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
+
 public interface INodeManager {
     void activateConnections(Node node);
     /*

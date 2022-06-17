@@ -1,6 +1,6 @@
 package dev.mattrm.mc.modularmachines.api.machine.pin.impl;
 
-import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
 import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;

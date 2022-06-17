@@ -3,7 +3,7 @@ package dev.mattrm.mc.modularmachines.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
 import dev.mattrm.mc.modularmachines.client.gui.graph.Connection;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;

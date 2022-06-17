@@ -1,7 +1,7 @@
 package dev.mattrm.mc.modularmachines.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.mattrm.mc.modularmachines.api.machine.Node;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
 import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
 import dev.mattrm.mc.modularmachines.client.gui.util.Justification;
