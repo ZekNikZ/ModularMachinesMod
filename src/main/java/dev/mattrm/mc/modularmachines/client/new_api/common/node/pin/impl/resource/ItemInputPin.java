@@ -1,16 +1,13 @@
-package dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl;
+package dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.resource;
 
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.PinBuilder;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.PinType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.ModPins;
 
-public class ItemInputPin extends ResourceInputPin<ItemOutputPin> {
+public class ItemInputPin extends ResourceInputPin {
 //    private static final int BUFFER_SIZE = 64;
 //    private ItemStack buffer = ItemStack.EMPTY;
 
-    public ItemInputPin(PinType<?> type, String id, String translationKey, int maxConnections) {
-        super(type, id, translationKey, maxConnections);
+    public ItemInputPin(String id, String translationKey, int maxConnections) {
+        super(ModPins.ITEM_INPUT.get(), id, translationKey, maxConnections);
     }
 
 //    public ItemStack insertIntoOutputBuffer(ItemStack stack, boolean simulate) {
@@ -75,13 +72,4 @@ public class ItemInputPin extends ResourceInputPin<ItemOutputPin> {
 //            }
 //        }
 //    }
-
-    public static PinBuilder<ItemInputPin> create(PinType<?> pinType, String id, String translationKey, int maxConnections) {
-        return new PinBuilder<>(pinType, id, translationKey, maxConnections) {
-            @Override
-            public ItemInputPin build() {
-                return new ItemInputPin(this.type, this.id, this.translationKey, this.maxConnections);
-            }
-        };
-    }
 }

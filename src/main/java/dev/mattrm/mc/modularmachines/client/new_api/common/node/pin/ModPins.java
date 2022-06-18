@@ -1,11 +1,12 @@
 package dev.mattrm.mc.modularmachines.client.new_api.common.node.pin;
 
+import cpw.mods.modlauncher.LaunchPluginHandler;
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.ItemInputPin;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.ItemOutputPin;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.ResourceInputPin;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.ResourceOutputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.IntegerInputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.resource.ItemInputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.resource.ItemOutputPin;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -39,40 +40,38 @@ public class ModPins {
     public static final ResourceLocation PIN_REGISTRY = new ResourceLocation(Constants.MOD_ID, "pins");
     public static final DeferredRegister<PinType<?>> PINS = DeferredRegister.create(PIN_REGISTRY, Constants.MOD_ID);
 
-    public static final RegistryObject<PinType<ItemInputPin>> ITEM_INPUT = registerInputPin(
+    public static final RegistryObject<PinType<ItemInputPin>> ITEM_INPUT = PINS.register(
         "item_input",
-        ItemInputPin::create,
-        Icons.ITEM,
-        Colors.ITEM,
-        "item_output"
+        () -> PinType.Builder.of(
+            ItemInputPin.class,
+            Pin.Type.INPUT,
+            Icons.ITEM,
+            Colors.ITEM,
+            ItemStack.class
+        ).build()
     );
-    public static final RegistryObject<PinType<ItemOutputPin>> ITEM_OUTPUT = registerOutputPin(
+    public static final RegistryObject<PinType<ItemOutputPin>> ITEM_OUTPUT = PINS.register(
         "item_output",
-        ItemOutputPin::create,
-        Icons.ITEM,
-        Colors.ITEM,
-        "item_input"
+        () -> PinType.Builder.of(
+            ItemOutputPin.class,
+            Pin.Type.OUTPUT,
+            Icons.ITEM,
+            Colors.ITEM,
+            ItemStack.class
+        ).build()
     );
 
-    private static <I extends ResourceInputPin<O>, O extends ResourceOutputPin<I>> RegistryObject<PinType<I>> registerInputPin(String key, PinType.PinBuilderConstructor<I> factory, ResourceLocation icon, Color color, String linkedPin) {
-        return PINS.register(key, () -> PinType.Builder.of(
-            factory,
+    public static final RegistryObject<PinType<IntegerInputPin>> INTEGER_INPUT = PINS.register(
+        "int_input",
+        () -> PinType.Builder.of(
+            IntegerInputPin.class,
             Pin.Type.INPUT,
-            icon,
-            color,
-            (pin) -> pin.type() == PINS.getEntries().stream().filter(p -> p.get().getRegistryName().getPath().equals(linkedPin)).findFirst().orElse(null).get()
-        ).build());
-    }
-
-    private static <I extends ResourceInputPin<O>, O extends ResourceOutputPin<I>> RegistryObject<PinType<O>> registerOutputPin(String key, PinType.PinBuilderConstructor<O> factory, ResourceLocation icon, Color color, String linkedPin) {
-        return PINS.register(key, () -> PinType.Builder.of(
-            factory,
-            Pin.Type.INPUT,
-            icon,
-            color,
-            (pin) -> pin.type() == linkedPin.get()
-        ).build());
-    }
+            Icons.INTEGER,
+            Colors.DATA,
+            Integer.class,
+            Boolean.class
+        ).build()
+    );
 
     public static void register(IEventBus eventBus) {
         PINS.register(eventBus);

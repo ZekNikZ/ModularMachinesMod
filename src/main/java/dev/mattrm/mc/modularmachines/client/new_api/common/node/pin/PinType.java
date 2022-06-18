@@ -2,24 +2,36 @@ package dev.mattrm.mc.modularmachines.client.new_api.common.node.pin;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class PinType<T extends Pin> extends ForgeRegistryEntry<PinType<T>> {
-    private final PinBuilderConstructor<? extends T> factory;
+    private final Class<T> discriminator;
     private final Pin.Type ioType;
     private final ResourceLocation icon;
     private final Color color;
     private final Function<Pin, Boolean> compatFunc;
+    private final Class<?>[] allowedDataTypes;
 
-    private PinType(PinBuilderConstructor<? extends T> factory, Pin.Type ioType, ResourceLocation icon, Color color, Function<Pin, Boolean> compatFunc) {
-        this.factory = factory;
+    private PinType(Class<T> discriminator, Pin.Type ioType, ResourceLocation icon, Color color, Function<Pin, Boolean> compatFunc, Class<?>[] allowedDataTypes) {
+        this.discriminator = discriminator;
         this.ioType = ioType;
         this.icon = icon;
         this.color = color;
-        this.compatFunc = compatFunc;
+        this.allowedDataTypes = allowedDataTypes;
+
+        this.compatFunc = Objects.requireNonNullElseGet(compatFunc, () -> (pin) -> {
+            HashSet<Class<?>> classes = new HashSet<>(Arrays.asList(this.allowedDataTypes));
+            return Arrays.stream(this.allowedDataTypes).noneMatch(classes::add);
+        });
+    }
+
+    public Class<T> getDiscriminator() {
+        return this.discriminator;
     }
 
     public Pin.Type ioType() {
@@ -38,37 +50,42 @@ public class PinType<T extends Pin> extends ForgeRegistryEntry<PinType<T>> {
         return this.ioType() != pin.type().ioType() && this.compatFunc.apply(pin);
     }
 
-    @FunctionalInterface
-    public interface PinBuilderConstructor<T extends Pin> {
-        PinBuilder<T> create(PinType<?> type, String id, String translationKey, int maxConnections);
-    }
-
-    @Nullable
-    public PinBuilder<? extends T> create(String id, String translationKey, int maxConnections) {
-        return this.factory.create(this, id, translationKey, maxConnections);
-    }
-
     public static final class Builder<T extends Pin> {
-        private final PinBuilderConstructor<? extends T> factory;
+        private final Class<T> discriminator;
         private final Pin.Type ioType;
         private final ResourceLocation icon;
         private final Color color;
         private final Function<Pin, Boolean> compatFunc;
+        private final Class<?>[] allowedDataTypes;
 
-        private Builder(PinBuilderConstructor<? extends T> factory, Pin.Type ioType, ResourceLocation icon, Color color, Function<Pin, Boolean> compatFunc) {
-            this.factory = factory;
+        private Builder(Class<T> discriminator, Pin.Type ioType, ResourceLocation icon, Color color, Function<Pin, Boolean> compatFunc) {
+            this.discriminator = discriminator;
             this.ioType = ioType;
             this.icon = icon;
             this.color = color;
             this.compatFunc = compatFunc;
+            this.allowedDataTypes = null;
         }
 
-        public static <T extends Pin> Builder<T> of(PinBuilderConstructor<? extends T> factory, Pin.Type ioType, ResourceLocation icon, Color color, Function<Pin, Boolean> compatFunc) {
-            return new Builder<>(factory, ioType, icon, color, compatFunc);
+        private Builder(Class<T> discriminator, Pin.Type ioType, ResourceLocation icon, Color color, Class<?>[] allowedDataTypes) {
+            this.discriminator = discriminator;
+            this.ioType = ioType;
+            this.icon = icon;
+            this.color = color;
+            this.compatFunc = null;
+            this.allowedDataTypes = allowedDataTypes;
+        }
+
+        public static <T extends Pin> Builder<T> of(Class<T> discriminator, Pin.Type ioType, ResourceLocation icon, Color color, Function<Pin, Boolean> compatFunc) {
+            return new Builder<>(discriminator, ioType, icon, color, compatFunc);
+        }
+
+        public static <T extends Pin> Builder<T> of(Class<T> discriminator, Pin.Type ioType, ResourceLocation icon, Color color, Class<?>... allowedDataTypes) {
+            return new Builder<>(discriminator, ioType, icon, color, allowedDataTypes);
         }
 
         public PinType<T> build() {
-            return new PinType<>(this.factory, this.ioType, this.icon, this.color, this.compatFunc);
+            return new PinType<>(this.discriminator, this.ioType, this.icon, this.color, this.compatFunc, this.allowedDataTypes);
         }
     }
 }
