@@ -5,7 +5,7 @@ PinType - registered with custom registry (RESOURCE_ITEM, DATA_INT, DATA_BOOL, C
 nodes have declared input and output pins which the blockentity or container link with a list of connections
 when a node is "done", it gets all of its connections and runs `transferData()`
 
-data input pins somehow need a way to have a "default/configured value" which can be something like this:
+data input pins somehow need a way to have a "default/configured value" which will look something like this:
 
      +--------+
      |  Node  |

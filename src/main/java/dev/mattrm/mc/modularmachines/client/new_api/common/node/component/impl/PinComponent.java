@@ -1,6 +1,7 @@
 package dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl;
 
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.ModNodeComponents;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.InputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.OutputPin;
@@ -11,13 +12,13 @@ import java.util.List;
 public class PinComponent extends NodeComponent {
     private final Node node;
 
-    public PinComponent(Object node) {
-        super(type);
-        this.node = (Node) node;
+    public PinComponent(Node node) {
+        super(ModNodeComponents.PINS.get());
+        this.node = node;
     }
 
     public PinComponent(CompoundTag nbt) {
-        super(type);
+        super(ModNodeComponents.PINS.get());
         this.deserializeNBT(nbt);
         this.node = null;
     }
