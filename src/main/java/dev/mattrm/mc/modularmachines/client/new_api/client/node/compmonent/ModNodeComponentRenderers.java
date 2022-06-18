@@ -1,5 +1,6 @@
 package dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent;
 
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.impl.PinComponentRenderer;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponentType;
 import dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.impl.SimpleTextNodeComponentRenderer;
@@ -21,5 +22,6 @@ public class ModNodeComponentRenderers {
 
     public static void registerDefaults() {
         register(ModNodeComponents.SIMPLE_TEXT.get(), SimpleTextNodeComponentRenderer::new);
+        register(ModNodeComponents.PINS.get(), PinComponentRenderer::new);
     }
 }

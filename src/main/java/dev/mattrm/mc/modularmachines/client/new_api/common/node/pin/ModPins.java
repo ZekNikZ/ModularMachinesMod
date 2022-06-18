@@ -2,7 +2,10 @@ package dev.mattrm.mc.modularmachines.client.new_api.common.node.pin;
 
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.BooleanInputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.BooleanOutputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.IntegerInputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.IntegerOutputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.resource.ItemInputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.resource.ItemOutputPin;
 import net.minecraft.resources.ResourceLocation;
@@ -66,6 +69,39 @@ public class ModPins {
         () -> PinType.Builder.of(
             IntegerInputPin.class,
             Pin.Type.INPUT,
+            Icons.INTEGER,
+            Colors.DATA,
+            Integer.class,
+            Boolean.class
+        ).build()
+    );
+    public static final RegistryObject<PinType<IntegerOutputPin>> INTEGER_OUTPUT = PINS.register(
+        "int_output",
+        () -> PinType.Builder.of(
+            IntegerOutputPin.class,
+            Pin.Type.OUTPUT,
+            Icons.INTEGER,
+            Colors.DATA,
+            Integer.class,
+            Boolean.class
+        ).build()
+    );
+    public static final RegistryObject<PinType<BooleanInputPin>> BOOLEAN_INPUT = PINS.register(
+        "int_input",
+        () -> PinType.Builder.of(
+            BooleanInputPin.class,
+            Pin.Type.INPUT,
+            Icons.INTEGER,
+            Colors.DATA,
+            Integer.class,
+            Boolean.class
+        ).build()
+    );
+    public static final RegistryObject<PinType<BooleanOutputPin>> BOOLEAN_OUTPUT = PINS.register(
+        "int_output",
+        () -> PinType.Builder.of(
+            BooleanOutputPin.class,
+            Pin.Type.OUTPUT,
             Icons.INTEGER,
             Colors.DATA,
             Integer.class,

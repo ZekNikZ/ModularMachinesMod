@@ -17,6 +17,56 @@ public interface IControllerRenderContext {
         return new TextComponent(text).setStyle(this.textStyle());
     }
 
+    default void drawString(PoseStack poseStack, Component component, float x, float y) {
+        this.drawStringInternal(poseStack, component, x, y, 0, false);
+    }
+
+    default void drawStringShadow(PoseStack poseStack, Component component, float x, float y) {
+        this.drawStringInternal(poseStack, component, x, y, 0, true);
+    }
+
+    default void drawString(PoseStack poseStack, Component component, float x, float y, int color) {
+        this.drawStringInternal(poseStack, component, x, y, color, false);
+    }
+
+    default void drawStringShadow(PoseStack poseStack, Component component, float x, float y, int color) {
+        this.drawStringInternal(poseStack, component, x, y, color, true);
+    }
+
+    default void drawString(PoseStack poseStack, Component component, float x, float y, ChatFormatting color) {
+        this.drawStringInternal(poseStack, component, x, y, color.getColor(), false);
+    }
+
+    default void drawStringShadow(PoseStack poseStack, Component component, float x, float y, ChatFormatting color) {
+        this.drawStringInternal(poseStack, component, x, y, color.getColor(), true);
+    }
+
+    default void drawStringJustified(PoseStack poseStack, Component component, float x, float y, Justification justification) {
+        this.drawStringJustifiedInternal(poseStack, component, x, y, 0, false, justification);
+    }
+
+    default void drawStringShadowJustified(PoseStack poseStack, Component component, float x, float y, Justification justification) {
+        this.drawStringJustifiedInternal(poseStack, component, x, y, 0, true, justification);
+    }
+
+    default void drawStringJustified(PoseStack poseStack, Component component, float x, float y, int color, Justification justification) {
+        this.drawStringJustifiedInternal(poseStack, component, x, y, color, false, justification);
+    }
+
+    default void drawStringShadowJustified(PoseStack poseStack, Component component, float x, float y, int color, Justification justification) {
+        this.drawStringJustifiedInternal(poseStack, component, x, y, color, true, justification);
+    }
+
+    default void drawStringJustified(PoseStack poseStack, Component component, float x, float y, ChatFormatting color, Justification justification) {
+        this.drawStringJustifiedInternal(poseStack, component, x, y, color.getColor(), false, justification);
+    }
+
+    default void drawStringShadowJustified(PoseStack poseStack, Component component, float x, float y, ChatFormatting color, Justification justification) {
+        this.drawStringJustifiedInternal(poseStack, component, x, y, color.getColor(), true, justification);
+    }
+
+    /// ----------------------------------------
+    
     default void drawString(PoseStack poseStack, String text, float x, float y) {
         this.drawStringInternal(poseStack, this.text(text), x, y, 0, false);
     }
@@ -39,10 +89,6 @@ public interface IControllerRenderContext {
 
     default void drawStringShadow(PoseStack poseStack, String text, float x, float y, ChatFormatting color) {
         this.drawStringInternal(poseStack, this.text(text), x, y, color.getColor(), true);
-    }
-
-    default void drawStringInternal(PoseStack poseStack, String text, float x, float y, int color, boolean shadow) {
-        this.drawStringInternal(poseStack, this.text(text), x, y, color, shadow);
     }
 
     default void drawStringJustified(PoseStack poseStack, String text, float x, float y, Justification justification) {
@@ -69,6 +115,12 @@ public interface IControllerRenderContext {
         this.drawStringJustifiedInternal(poseStack, this.text(text), x, y, color.getColor(), true, justification);
     }
 
+    /// ----------------------------------------
+
+    default void drawStringInternal(PoseStack poseStack, String text, float x, float y, int color, boolean shadow) {
+        this.drawStringInternal(poseStack, this.text(text), x, y, color, shadow);
+    }
+    
     default void drawStringInternalJustified(PoseStack poseStack, String text, float x, float y, int color, boolean shadow, Justification justification) {
         this.drawStringJustifiedInternal(poseStack, this.text(text), x, y, color, shadow, justification);
     }

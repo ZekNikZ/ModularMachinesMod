@@ -5,7 +5,7 @@ import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowInputPin;
 import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowOutputPin;
-import dev.mattrm.mc.modularmachines.client.gui.PinComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.PinComponent;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
 
 import java.util.*;

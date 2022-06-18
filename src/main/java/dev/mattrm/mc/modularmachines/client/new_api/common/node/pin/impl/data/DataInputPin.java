@@ -25,7 +25,7 @@ public abstract class DataInputPin<T> extends InputPin {
         return this.value;
     }
 
-    private void internalSetValue(T value) {
+    protected void internalSetValue(T value) {
         this.value = value;
     }
 

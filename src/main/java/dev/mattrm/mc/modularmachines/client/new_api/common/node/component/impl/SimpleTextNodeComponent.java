@@ -8,10 +8,12 @@ public class SimpleTextNodeComponent extends NodeComponent {
     private int color = 0;
 
     public SimpleTextNodeComponent(Object text) {
+        super(type);
         this.text = (String) text;
     }
 
     public SimpleTextNodeComponent(CompoundTag nbt) {
+        super(type);
         this.deserializeNBT(nbt);
     }
 
