@@ -1,6 +1,6 @@
 package dev.mattrm.mc.modularmachines.client.event;
 
-import dev.mattrm.mc.modularmachines.client.new_api.client.node.component.ModNodeComponentRenderers;
+import dev.mattrm.mc.modularmachines.client.gui.graph.component.ModNodeComponentRenderers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
