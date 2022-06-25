@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent;
+package dev.mattrm.mc.modularmachines.client.new_api.client.node.component;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.client.gui.AbstractFocusableEventListener;

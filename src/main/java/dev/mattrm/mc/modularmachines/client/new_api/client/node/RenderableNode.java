@@ -5,7 +5,7 @@ import dev.mattrm.mc.modularmachines.Constants;
 import dev.mattrm.mc.modularmachines.client.gui.AbstractFocusableEventListener;
 import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
 import dev.mattrm.mc.modularmachines.client.gui.StretchableTexture;
-import dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.NodeComponentRenderer;
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.component.NodeComponentRenderer;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;
 import net.minecraft.resources.ResourceLocation;

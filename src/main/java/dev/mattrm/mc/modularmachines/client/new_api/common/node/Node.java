@@ -1,12 +1,12 @@
 package dev.mattrm.mc.modularmachines.client.new_api.common.node;
 
-import dev.mattrm.mc.modularmachines.api.machine.INodeManager;
-import dev.mattrm.mc.modularmachines.api.machine.pin.InputPin;
-import dev.mattrm.mc.modularmachines.api.machine.pin.OutputPin;
-import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowInputPin;
-import dev.mattrm.mc.modularmachines.api.machine.pin.impl.ControlFlowOutputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.INodeManager;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.PinComponent;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.NodeComponent;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.InputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.OutputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.control.ControlFlowInputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.control.ControlFlowOutputPin;
 
 import java.util.*;
 
@@ -16,10 +16,10 @@ public abstract class Node {
     private final UUID id;
     private final ControlFlowInput controlFlowInputState;
     private final ControlFlowOutput controlFlowOutputState;
-    private final List<InputPin<?>> inputPins = new ArrayList<>();
-    private final Map<String, InputPin<?>> inputPinMap = new HashMap<>();
-    private final List<OutputPin<?, ?>> outputPins = new ArrayList<>();
-    private final Map<String, OutputPin<?, ?>> outputPinMap = new HashMap<>();
+    private final List<InputPin> inputPins = new ArrayList<>();
+    private final Map<String, InputPin> inputPinMap = new HashMap<>();
+    private final List<OutputPin> outputPins = new ArrayList<>();
+    private final Map<String, OutputPin> outputPinMap = new HashMap<>();
     private final List<NodeComponent> components = new ArrayList<>();
 
     private int x = 0;
@@ -45,14 +45,14 @@ public abstract class Node {
 
     abstract protected void initComponents();
 
-    protected void addInputPin(InputPin<?> pin) {
+    protected void addInputPin(InputPin pin) {
         this.inputPins.add(pin);
-        this.inputPinMap.put(pin.name(), pin);
+        this.inputPinMap.put(pin.id(), pin);
     }
 
-    protected void addOutputPin(OutputPin<?, ?> pin) {
+    protected void addOutputPin(OutputPin pin) {
         this.outputPins.add(pin);
-        this.outputPinMap.put(pin.name(), pin);
+        this.outputPinMap.put(pin.id(), pin);
     }
 
     public final ControlFlowInput getControlFlowInputState() {
@@ -63,19 +63,19 @@ public abstract class Node {
         return this.controlFlowOutputState;
     }
 
-    public final List<InputPin<?>> getInputPins() {
+    public final List<InputPin> getInputPins() {
         return this.inputPins;
     }
 
-    public final List<OutputPin<?, ?>> getOutputPins() {
+    public final List<OutputPin> getOutputPins() {
         return this.outputPins;
     }
 
-    public final InputPin<?> getInputPins(String name) {
+    public final InputPin getInputPins(String name) {
         return this.inputPinMap.get(name);
     }
 
-    public final OutputPin<?, ?> getOutputPins(String name) {
+    public final OutputPin getOutputPins(String name) {
         return this.outputPinMap.get(name);
     }
 
@@ -118,7 +118,7 @@ public abstract class Node {
      * @return whether to go through with the activation
      */
     @Deprecated
-    public boolean activationAllowed() {
+    protected boolean activationAllowed() {
         return true;
     }
 
@@ -133,4 +133,27 @@ public abstract class Node {
         // TODO: this is a stupid way to do this, figure out a better way
         this.manager.activateConnections(this);
     }
+
+    public INodeManager getManager() {
+        return this.manager;
+    }
+
+    public enum Type {
+        COMPUTATION(0), // nodes that compute data values
+        CONTROL(1), // nodes that process control flow states
+        PROCESSING(2), // nodes that take resource inputs and provide outputs
+        ;
+
+        private final int priority;
+
+        Type(int priority) {
+            this.priority = priority;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+    }
+
+    public abstract Type type();
 }

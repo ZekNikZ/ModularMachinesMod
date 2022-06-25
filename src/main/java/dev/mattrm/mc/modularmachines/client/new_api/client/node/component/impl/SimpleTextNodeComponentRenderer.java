@@ -1,8 +1,8 @@
-package dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.impl;
+package dev.mattrm.mc.modularmachines.client.new_api.client.node.component.impl;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.client.gui.IControllerRenderContext;
-import dev.mattrm.mc.modularmachines.client.new_api.client.node.compmonent.NodeComponentRenderer;
+import dev.mattrm.mc.modularmachines.client.new_api.client.node.component.NodeComponentRenderer;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.ModNodeComponents;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.SimpleTextNodeComponent;
 import net.minecraft.client.Minecraft;

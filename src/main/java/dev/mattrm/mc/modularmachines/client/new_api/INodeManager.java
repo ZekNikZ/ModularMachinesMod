@@ -1,4 +1,4 @@
-package dev.mattrm.mc.modularmachines.api.machine;
+package dev.mattrm.mc.modularmachines.client.new_api;
 
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
 
@@ -12,4 +12,10 @@ public interface INodeManager {
      *
      * if any connected nodes via output pins are set to "automatic", activate them
      */
+
+    default void addToActivationQueue(Node node) {
+        this.addToQueue(node.type(), node);
+    }
+
+    void addToQueue(Node.Type type, Node node);
 }

@@ -43,60 +43,60 @@ public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEn
 
         // TODO: DEBUG
         this.nodes = List.of(
-            new Node(null, UUID.randomUUID(), ControlFlowInput.ENABLED_AUTOMATIC, ControlFlowOutput.DISABLED) {
-                @Override
-                protected void initComponents() {
-                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
-                    this.addComponent(new SimpleTextNodeComponent("Test 1"));
-                    this.addComponent(new SimpleTextNodeComponent("Test 2"));
-                }
-
-                @Override
-                public boolean activateNode() {
-                    return true;
-                }
-            },
-            new Node(null, UUID.randomUUID(), ControlFlowInput.DISABLED, ControlFlowOutput.ENABLED) {
-                @Override
-                protected void initComponents() {
-                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
-                    this.addComponent(new SimpleTextNodeComponent("Test 3"));
-                    this.addComponent(new SimpleTextNodeComponent("Test 4"));
-                }
-
-                @Override
-                public boolean activateNode() {
-                    return true;
-                }
-            },
-            new Node(null, UUID.randomUUID(), ControlFlowInput.ENABLED_AUTOMATIC, ControlFlowOutput.ENABLED) {
-                @Override
-                protected void initComponents() {
-                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
-                    this.addComponent(new SimpleTextNodeComponent("Test 3"));
-                    this.addComponent(new SimpleTextNodeComponent("Test 4"));
-                }
-
-                @Override
-                public boolean activateNode() {
-                    return true;
-                }
-            }
+//            new Node(null, UUID.randomUUID(), ControlFlowInput.ENABLED_AUTOMATIC, ControlFlowOutput.DISABLED) {
+//                @Override
+//                protected void initComponents() {
+//                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
+//                    this.addComponent(new SimpleTextNodeComponent("Test 1"));
+//                    this.addComponent(new SimpleTextNodeComponent("Test 2"));
+//                }
+//
+//                @Override
+//                public boolean activateNode() {
+//                    return true;
+//                }
+//            },
+//            new Node(null, UUID.randomUUID(), ControlFlowInput.DISABLED, ControlFlowOutput.ENABLED) {
+//                @Override
+//                protected void initComponents() {
+//                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
+//                    this.addComponent(new SimpleTextNodeComponent("Test 3"));
+//                    this.addComponent(new SimpleTextNodeComponent("Test 4"));
+//                }
+//
+//                @Override
+//                public boolean activateNode() {
+//                    return true;
+//                }
+//            },
+//            new Node(null, UUID.randomUUID(), ControlFlowInput.ENABLED_AUTOMATIC, ControlFlowOutput.ENABLED) {
+//                @Override
+//                protected void initComponents() {
+//                    this.addComponent(new SimpleTextNodeComponent(this.getId().toString()));
+//                    this.addComponent(new SimpleTextNodeComponent("Test 3"));
+//                    this.addComponent(new SimpleTextNodeComponent("Test 4"));
+//                }
+//
+//                @Override
+//                public boolean activateNode() {
+//                    return true;
+//                }
+//            }
         );
-        this.nodes.get(0).setX(100);
-        this.nodes.get(0).setY(10);
-        this.nodes.get(1).setX(100);
-        this.nodes.get(1).setY(100);
-        this.nodes.get(2).setX(100);
-        this.nodes.get(2).setY(200);
-
+//        this.nodes.get(0).setX(100);
+//        this.nodes.get(0).setY(10);
+//        this.nodes.get(1).setX(100);
+//        this.nodes.get(1).setY(100);
+//        this.nodes.get(2).setX(100);
+//        this.nodes.get(2).setY(200);
+//
         this.connections = new ArrayList<>();
-        this.connections.add(new Connection(
-            this.nodes.get(1).getId(),
-            this.nodes.get(1).getOutputPins().get(0).name(),
-            this.nodes.get(2).getId(),
-            this.nodes.get(2).getInputPins().get(0).name()
-        ));
+//        this.connections.add(new Connection(
+//            this.nodes.get(1).getId(),
+//            this.nodes.get(1).getOutputPins().get(0).name(),
+//            this.nodes.get(2).getId(),
+//            this.nodes.get(2).getInputPins().get(0).name()
+//        ));
     }
 
     @Override

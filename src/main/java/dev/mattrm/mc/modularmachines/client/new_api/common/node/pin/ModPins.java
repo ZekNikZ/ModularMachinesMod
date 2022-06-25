@@ -2,6 +2,8 @@ package dev.mattrm.mc.modularmachines.client.new_api.common.node.pin;
 
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import dev.mattrm.mc.modularmachines.Constants;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.control.ControlFlowInputPin;
+import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.control.ControlFlowOutputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.BooleanInputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.BooleanOutputPin;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.pin.impl.data.IntegerInputPin;
@@ -18,6 +20,8 @@ import java.awt.*;
 
 public class ModPins {
     private static class Colors {
+        public static final Color CONTROL_FLOW = Color.GREEN;
+
         public static final Color ITEM = Color.RED;
         public static final Color FLUID = Color.BLUE;
         public static final Color ENERGY = Color.YELLOW;
@@ -27,6 +31,7 @@ public class ModPins {
     }
 
     private static class Icons {
+        public static final ResourceLocation CONTROL_FLOW = r("control_flow");
         public static final ResourceLocation ITEM = r("item");
         public static final ResourceLocation FLUID = r("fluid");
         public static final ResourceLocation ENERGY = r("energy");
@@ -42,6 +47,28 @@ public class ModPins {
 
     public static final ResourceLocation PIN_REGISTRY = new ResourceLocation(Constants.MOD_ID, "pins");
     public static final DeferredRegister<PinType<?>> PINS = DeferredRegister.create(PIN_REGISTRY, Constants.MOD_ID);
+
+    static class ControlFlow {}
+    public static final RegistryObject<PinType<ControlFlowInputPin>> CONTROL_INPUT = PINS.register(
+        "control_flow_input",
+        () -> PinType.Builder.of(
+            ControlFlowInputPin.class,
+            Pin.Type.INPUT,
+            Icons.CONTROL_FLOW,
+            Colors.CONTROL_FLOW,
+            ControlFlow.class
+        ).build()
+    );
+    public static final RegistryObject<PinType<ControlFlowOutputPin>> CONTROL_OUTPUT = PINS.register(
+        "control_flow_output",
+        () -> PinType.Builder.of(
+            ControlFlowOutputPin.class,
+            Pin.Type.OUTPUT,
+            Icons.CONTROL_FLOW,
+            Colors.CONTROL_FLOW,
+            ControlFlow.class
+        ).build()
+    );
 
     public static final RegistryObject<PinType<ItemInputPin>> ITEM_INPUT = PINS.register(
         "item_input",

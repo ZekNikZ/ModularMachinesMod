@@ -5,8 +5,8 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineController;
 import dev.mattrm.mc.modularmachines.api.block.IMachineCore;
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
-import dev.mattrm.mc.modularmachines.api.machine.INodeManager;
-import dev.mattrm.mc.modularmachines.api.machine.INodeProvider;
+import dev.mattrm.mc.modularmachines.client.new_api.INodeManager;
+import dev.mattrm.mc.modularmachines.client.new_api.INodeProvider;
 import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
@@ -33,8 +33,14 @@ public class MachineControllerBlockEntity extends SynchedDataBlockEntity impleme
     private Cuboid bounds;
     private String errorMessage = null;
 
+    private final Map<Node.Type, Queue<Node>> queuedNodes = new HashMap<>();
+
     public MachineControllerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.MACHINE_CONTROLLER.get(), blockPos, blockState);
+
+        for (Node.Type type : Node.Type.values()) {
+            this.queuedNodes.put(type, new LinkedList<>());
+        }
 
         this.addSynchedData("data", ControllerSynchedData::new);
     }
@@ -353,5 +359,10 @@ public class MachineControllerBlockEntity extends SynchedDataBlockEntity impleme
     @Override
     public void activateConnections(Node node) {
         // TODO: implement
+    }
+
+    @Override
+    public void addToQueue(Node.Type type, Node node) {
+        this.queuedNodes.get(type).offer(node);
     }
 }

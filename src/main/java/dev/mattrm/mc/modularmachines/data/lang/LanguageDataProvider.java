@@ -41,5 +41,10 @@ public class LanguageDataProvider extends LanguageProvider {
         ModGuiTranslation.VALUES.forEach(key -> {
             this.add(key.getTranslationKey(), key.getDefault());
         });
+
+        // Misc.
+        ModMiscLangEntries.VALUES.forEach(key -> {
+            this.add(key.getTranslationKey(), key.getDefault());
+        });
     }
 }
