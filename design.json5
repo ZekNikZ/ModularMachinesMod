@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "uuid1": {
+      "type": {
+        "provider": "modularmachines:library",
+        "name": "constant_number",
+        // registry for libraries ForgeRegistry<? extends >
+        "library": "modularmachines:std"
+      },
+      "display": {
+        "X": 0,
+        "Y": 0
+      },
+      // extra data
+      "value": 20
+    },
+    "uuid2": {
+      "type": {
+        "provider": "modularmachines:blockentity",
+        "name": "boop",
+        "position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "display": {
+        "X": 0,
+        "Y": 0
+      }
+    }
+  },
+  "connections": [
+    {
+      // enforce that "from" is always an output pin
+      "from_node": "uuid1",
+      "from_pin": "output",
+      // enforce that "to" is always an input pin
+      "to_node": "uuid2",
+      "to_pin": "input"
+    }
+  ]
+}
+
