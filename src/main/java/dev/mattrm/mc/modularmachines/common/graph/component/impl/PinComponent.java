@@ -18,8 +18,7 @@ public class PinComponent extends NodeComponent {
     }
 
     public PinComponent(CompoundTag nbt) {
-        super(ModNodeComponents.PINS.get());
-        this.deserializeNBT(nbt);
+        super(ModNodeComponents.PINS.get(), nbt);
         this.node = null;
     }
 
@@ -34,9 +33,8 @@ public class PinComponent extends NodeComponent {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public void serializeNBT(CompoundTag nbt) {
         // TODO: serialize the pins
-        return null;
     }
 
     @Override

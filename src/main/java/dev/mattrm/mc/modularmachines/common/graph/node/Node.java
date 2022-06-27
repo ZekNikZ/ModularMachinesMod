@@ -1,15 +1,23 @@
 package dev.mattrm.mc.modularmachines.common.graph.node;
 
-import dev.mattrm.mc.modularmachines.common.graph.component.impl.PinComponent;
+import dev.mattrm.mc.modularmachines.common.graph.component.ModNodeComponents;
 import dev.mattrm.mc.modularmachines.common.graph.component.NodeComponent;
+import dev.mattrm.mc.modularmachines.common.graph.component.NodeComponentType;
+import dev.mattrm.mc.modularmachines.common.graph.component.impl.PinComponent;
 import dev.mattrm.mc.modularmachines.common.graph.pin.impl.InputPin;
 import dev.mattrm.mc.modularmachines.common.graph.pin.impl.OutputPin;
 import dev.mattrm.mc.modularmachines.common.graph.pin.impl.control.ControlFlowInputPin;
 import dev.mattrm.mc.modularmachines.common.graph.pin.impl.control.ControlFlowOutputPin;
+import dev.mattrm.mc.modularmachines.common.util.IMetadataNBTSerializable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public abstract class Node {
+public abstract class Node implements IMetadataNBTSerializable {
     private final INodeManager manager;
 
     private final UUID id;
@@ -19,7 +27,7 @@ public abstract class Node {
     private final Map<String, InputPin> inputPinMap = new HashMap<>();
     private final List<OutputPin> outputPins = new ArrayList<>();
     private final Map<String, OutputPin> outputPinMap = new HashMap<>();
-    private final List<NodeComponent> components = new ArrayList<>();
+    private List<NodeComponent> components = new ArrayList<>();
 
     private int x = 0;
     private int y = 0;
@@ -82,12 +90,9 @@ public abstract class Node {
         this.components.add(component);
     }
 
-
-
     public final UUID getId() {
         return this.id;
     }
-
 
     public int getX() {
         return x;
@@ -155,4 +160,40 @@ public abstract class Node {
     }
 
     public abstract Type type();
+
+    @Override
+    public final CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
+
+        ListTag list = new ListTag();
+        list.addAll(this.components.stream().map(c -> {
+            CompoundTag tag = new CompoundTag();
+            tag.putString("type", String.valueOf(c.type().getRegistryName()));
+            c.serializeNBT(tag);
+            return tag;
+        }).collect(Collectors.toList()));
+        nbt.put("components", list);
+        this.saveAdditional(nbt);
+
+        return nbt;
+    }
+
+    public void saveAdditional(CompoundTag nbt) {
+    }
+
+    @Override
+    public final void deserializeNBT(CompoundTag nbt) {
+        this.components = nbt.getList("components", Tag.TAG_COMPOUND).stream().map(c -> {
+            CompoundTag tag = ((CompoundTag) c);
+            String type = tag.getString("type");
+            NodeComponentType<?> componentType = ModNodeComponents.REGISTRY.get().getValue(ResourceLocation.tryParse(type));
+            // TODO: error checking ^
+            return componentType.create(tag);
+        }).collect(Collectors.toList());
+
+        this.load(nbt);
+    }
+
+    public void load(CompoundTag nbt) {
+    }
 }

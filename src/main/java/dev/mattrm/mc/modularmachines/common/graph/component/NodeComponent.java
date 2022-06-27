@@ -1,13 +1,17 @@
 package dev.mattrm.mc.modularmachines.common.graph.component;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
 
-public abstract class NodeComponent implements INBTSerializable<CompoundTag> {
+public abstract class NodeComponent {
     private final NodeComponentType<?> type;
 
     protected NodeComponent(NodeComponentType<?> type) {
         this.type = type;
+    }
+
+    public NodeComponent(NodeComponentType<?> type, CompoundTag nbt) {
+        this.type = type;
+        this.deserializeNBT(nbt);
     }
 
     public NodeComponentType<?> type() {
@@ -17,4 +21,7 @@ public abstract class NodeComponent implements INBTSerializable<CompoundTag> {
     public boolean isHidden() {
         return false;
     }
+
+    public abstract void serializeNBT(CompoundTag nbt);
+    public abstract void deserializeNBT(CompoundTag nbt);
 }

@@ -13,8 +13,8 @@ public class NodeComponentType<T extends NodeComponent> extends ForgeRegistryEnt
     }
 
     @Nullable
-    public T create(CompoundTag data) {
-        return this.deserializer.create(data);
+    public T create(CompoundTag nbt) {
+        return this.deserializer.create(nbt);
     }
 
     @FunctionalInterface

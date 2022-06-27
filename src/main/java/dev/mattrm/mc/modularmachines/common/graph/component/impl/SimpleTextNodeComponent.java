@@ -14,8 +14,7 @@ public class SimpleTextNodeComponent extends NodeComponent {
     }
 
     public SimpleTextNodeComponent(CompoundTag nbt) {
-        super(ModNodeComponents.SIMPLE_TEXT.get());
-        this.deserializeNBT(nbt);
+        super(ModNodeComponents.SIMPLE_TEXT.get(), nbt);
     }
 
     public String getText() {
@@ -23,10 +22,8 @@ public class SimpleTextNodeComponent extends NodeComponent {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag nbt = new CompoundTag();
+    public void serializeNBT(CompoundTag nbt) {
         nbt.putString("text", this.text);
-        return nbt;
     }
 
     @Override
