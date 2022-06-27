@@ -3,12 +3,8 @@ package dev.mattrm.mc.modularmachines.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mattrm.mc.modularmachines.Constants;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.Node;
-import dev.mattrm.mc.modularmachines.client.gui.graph.Connection;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowInput;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.ControlFlowOutput;
-import dev.mattrm.mc.modularmachines.client.new_api.client.node.RenderableNode;
-import dev.mattrm.mc.modularmachines.client.new_api.common.node.component.impl.SimpleTextNodeComponent;
+import dev.mattrm.mc.modularmachines.common.graph.Connection;
+import dev.mattrm.mc.modularmachines.client.gui.graph.RenderableNode;
 import dev.mattrm.mc.modularmachines.common.blockentity.ControllerSynchedData;
 import dev.mattrm.mc.modularmachines.common.blockentity.MachineControllerBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -25,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ControllerScreen extends SynchedDataScreen<MachineControllerBlockEntity> implements IControllerRenderContext {
     private static final ResourceLocation BG_TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/blueprint.png");
