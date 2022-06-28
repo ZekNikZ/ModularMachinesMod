@@ -1,5 +1,7 @@
-package dev.mattrm.mc.modularmachines.common.graph.node;
+package dev.mattrm.mc.modularmachines.common.graph.node.provider;
 
+import dev.mattrm.mc.modularmachines.common.graph.node.INodeManager;
+import dev.mattrm.mc.modularmachines.common.graph.node.Node;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

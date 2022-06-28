@@ -6,7 +6,7 @@ import dev.mattrm.mc.modularmachines.api.block.IMachineCore;
 import dev.mattrm.mc.modularmachines.api.block.IMachinePart;
 import dev.mattrm.mc.modularmachines.api.block.IMachineWall;
 import dev.mattrm.mc.modularmachines.common.graph.node.INodeManager;
-import dev.mattrm.mc.modularmachines.common.graph.node.INodeProvider;
+import dev.mattrm.mc.modularmachines.common.graph.node.provider.INodeProvider;
 import dev.mattrm.mc.modularmachines.common.graph.node.Node;
 import dev.mattrm.mc.modularmachines.common.tag.ModTags;
 import dev.mattrm.mc.modularmachines.common.util.Cuboid;
